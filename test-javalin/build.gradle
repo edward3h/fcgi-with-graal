@@ -1,0 +1,71 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import gg.jte.ContentType
+import java.nio.file.Paths
+
+plugins {
+    id 'my_native'
+    id 'gg.jte.gradle' version '1.7.0'
+}
+
+dependencies {
+    implementation group: 'io.javalin', name: 'javalin', version: '3.13.3'
+    implementation group: 'gg.jte', name: 'jte', version: '1.7.0'
+    implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch')
+}
+
+my_native {
+    dockerImageName = imageName
+    mainClassName ="org.ethelred.techtest.test2.TestJavalin"
+    appName = "javalin.fcgi"
+    remoteHost = rootProject.remoteHost
+    deployDir = rootProject.deployDir["test-javalin"]
+
+    generateNativeConfigEnvironment.putAll("CONTENT_LENGTH": "0",
+            "CONTEXT_PREFIX": "",
+            "GATEWAY_INTERFACE": "CGI/1.1",
+            "HTTP_ACCEPT": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "HTTP_ACCEPT_ENCODING": "gzip, deflate",
+            "HTTP_ACCEPT_LANGUAGE": "en-US,en;q=0.9",
+            "HTTP_CONNECTION": "close",
+            "HTTP_DNT": "1",
+            "HTTP_HOST": "example.com",
+            "HTTP_SEC_GPC": "1",
+            "HTTP_UPGRADE_INSECURE_REQUESTS": "1",
+            "HTTP_USER_AGENT": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36",
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "PATH_INFO": "",
+            "QUERY_STRING": "",
+            "REMOTE_ADDR": "192.168.0.3",
+            "REMOTE_PORT": "52716",
+            "REQUEST_METHOD": "GET",
+            "REQUEST_SCHEME": "http",
+            "REQUEST_URI": "/javalin.fcgi",
+            "SCRIPT_FILENAME": "/javalin.fcgi",
+            "SCRIPT_NAME": "/javalin.fcgi",
+            "SCRIPT_URI": "http://example.com/javalin.fcgi",
+            "SCRIPT_URL": "/javalin.fcgi",
+            "SERVER_ADDR": "192.168.0.2",
+            "SERVER_NAME": "example.com",
+            "SERVER_PORT": "80",
+            "SERVER_PROTOCOL": "HTTP/1.1")
+}
+
+// https://github.com/casid/jte/blob/master/DOCUMENTATION.md#using-the-application-class-loader-since-120
+tasks.generateJte {
+    sourceDirectory = Paths.get(project.projectDir.absolutePath, "src", "main", "jte")
+    contentType = ContentType.Html
+}
+
+sourceSets.main.java.srcDirs += tasks.generateJte.targetDirectory
+
+tasks.compileJava {
+    dependsOn(tasks.generateJte)
+}
+
+task deployPublic(type: Copy) {
+    from "src/main/resources/public"
+    into "$buildDir/deploy/"
+    filter(ReplaceTokens, tokens: [appName: "javalin.fcgi"])
+}
+
+deploy.dependsOn(deployPublic)

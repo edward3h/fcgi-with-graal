@@ -1,0 +1,38 @@
+if (file('local.gradle').exists()) {
+    apply from: 'local.gradle'
+} else {
+    logger.warn 'Missing local.gradle settings file. Copy local.gradle.example to create one.'
+}
+
+subprojects {
+    ext {
+        imageName = "techtest/herobuilder"
+    }
+    if (it.name == "builder") return
+
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+        runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+
+        testImplementation 'org.codehaus.groovy:groovy-all:3.0.4'
+        testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    task cleanBin(type: Delete) {
+        delete('bin')
+    }
+
+    clean.dependsOn(cleanBin)
+}

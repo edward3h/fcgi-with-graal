@@ -1,0 +1,10 @@
+[36m18:18:56.034[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
+	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
+	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
+	at org.ethelred.techtest.test1.RawServer.main(RawServer.java:20)
+[36m19:59:25.584[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
+	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
+	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
+	at org.ethelred.techtest.test1.RawServer.main(RawServer.java:20)

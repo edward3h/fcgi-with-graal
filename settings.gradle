@@ -1,0 +1,6 @@
+
+rootProject.name = 'fcgi-with-graal'
+include 'builder', 'cgi-api', 'plain-cgi', 'libfcgi-graal', 'test-cli'
+include 'test-cgi', 'cgi-servlet-container', 'test-javalin'
+include 'logback-native-patch'
+

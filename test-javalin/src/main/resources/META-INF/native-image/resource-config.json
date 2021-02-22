@@ -1,0 +1,10 @@
+{
+  "resources":[
+    {"pattern":"\\Qlogback.xml\\E"}, 
+    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
+  ],
+  "bundles":[
+    {"name":"javax.servlet.LocalStrings"}, 
+    {"name":"javax.servlet.http.LocalStrings"}
+  ]
+}

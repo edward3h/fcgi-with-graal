@@ -1,0 +1,6 @@
+
+
+dependencies {
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation group: 'org.graalvm.sdk', name: 'graal-sdk', version: '20.2.0'
+}

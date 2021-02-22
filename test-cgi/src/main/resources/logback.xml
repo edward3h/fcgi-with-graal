@@ -1,0 +1,14 @@
+<configuration>
+
+    <appender name="NORMAL" class="org.ethelred.util.log.LazyFileAppender">
+        <file>test-cgi.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="NORMAL" />
+    </root>
+</configuration>

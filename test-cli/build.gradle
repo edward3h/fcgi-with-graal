@@ -1,0 +1,14 @@
+
+apply plugin: 'my_native'
+
+my_native {
+    dockerImageName = imageName
+    mainClassName ="org.ethelred.techtest.HelloWorld"
+    appName = "helloworld"
+    remoteHost = rootProject.remoteHost
+}
+
+test {
+    dependsOn(deploy)
+    systemProperties(host: remoteHost, appName: "helloworld")
+}

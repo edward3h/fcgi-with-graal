@@ -1,0 +1,23 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'my_native'
+
+my_native {
+    dockerImageName = imageName
+    mainClassName ="org.ethelred.techtest.test1.RawServer"
+    appName = "test.fcgi"
+    remoteHost = rootProject.remoteHost
+    deployDir = rootProject.deployDir["test-cgi"]
+}
+
+task deployPublic(type: Copy) {
+    from "src/main/resources/public"
+    into "$buildDir/deploy/"
+    filter(ReplaceTokens, tokens: [appName: "test.fcgi"])
+}
+
+deploy.dependsOn(deployPublic)
+
+dependencies {
+    implementation project(":cgi-api"), project(":libfcgi-graal"), project(':logback-native-patch')
+}

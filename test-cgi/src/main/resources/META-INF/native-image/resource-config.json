@@ -1,0 +1,7 @@
+{
+  "resources":[
+    {"pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"}, 
+    {"pattern":"\\Qlogback.xml\\E"}
+  ],
+  "bundles":[]
+}
