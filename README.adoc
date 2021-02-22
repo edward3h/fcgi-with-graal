@@ -1,0 +1,37 @@
+= FCGI with Graal
+Edward <jaq@ethelred.org>
+v0.1, 2021-02-22
+
+This is my third in a series of attempts to be able to write web services in Java but still have them run on my basic shared hosting account. The most performant API available in that environment seems to be FCGI. I'm using Graal Native Image to target it.
+
+== Current Modules
+
+=== builder
+Docker image with library versions to match the target hosting servers.
+
+=== buildSrc
+Contains "my native" Gradle plugin to standardise building native image in docker. There are existing Gradle plugins for building native images, and for running Docker, but I didn't find it easy to combine them.
+
+=== cgi-api
+Java interfaces for building a CGI web app against - pretty low level.
+
+=== cgi-servlet-container
+Java Servlet support on top of cgi-api. link:cgi-servlet-container/README.md[With some big limitations!]
+
+=== libfcgi-graal
+Implementation of cgi-api that uses https://cornerwings.github.io/2018/07/graal-native-methods/[Graal native CLibrary] to link with libfcgi.
+
+=== logback-native-patch
+This is a workaround for a build issue with using Logback file appenders in Graal native image.
+
+=== plain-cgi
+Implementation of cgi-api using basic CGI semantics - environment variables, standard in and out.
+
+=== test-cgi
+Test web app built on cgi-api.
+
+=== test-cli
+Hello world app to test the native image build process.
+
+=== test-javalin
+A test app built with https://javalin.io/[Javalin] deployed into cgi-servlet-container. https://jte.gg/[JTE] is used for pre-compiled templates which get built into the native image.
