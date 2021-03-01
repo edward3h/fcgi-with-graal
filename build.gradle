@@ -6,12 +6,11 @@ if (file('local.gradle').exists()) {
 
 subprojects {
     ext {
-        imageName = "techtest/herobuilder"
+        imageName = "ghcr.io/edward3h/graal-fcgi-fake-dh-builder:latest"
     }
-    if (it.name == "builder") return
 
     apply plugin: 'java'
-    apply plugin: 'groovy'
+    apply plugin: 'groovy' // groovy is used for tests only
 
     repositories {
         jcenter()

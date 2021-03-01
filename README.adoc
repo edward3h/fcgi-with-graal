@@ -6,9 +6,6 @@ This is my third in a series of attempts to be able to write web services in Jav
 
 == Current Modules
 
-=== builder
-Docker image with library versions to match the target hosting servers.
-
 === buildSrc
 Contains "my native" Gradle plugin to standardise building native image in docker. There are existing Gradle plugins for building native images, and for running Docker, but I didn't find it easy to combine them.
 
