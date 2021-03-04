@@ -6,9 +6,6 @@ This is my third in a series of attempts to be able to write web services in Jav
 
 == Current Modules
 
-=== buildSrc
-Contains "my native" Gradle plugin to standardise building native image in docker. There are existing Gradle plugins for building native images, and for running Docker, but I didn't find it easy to combine them.
-
 === cgi-api
 Java interfaces for building a CGI web app against - pretty low level.
 

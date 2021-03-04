@@ -1,6 +1,11 @@
+pluginManagement {
+    repositories {
+// uncomment for local plugin testing       mavenLocal()
+        gradlePluginPortal()
+    }
+}
 
 rootProject.name = 'fcgi-with-graal'
 include 'cgi-api', 'plain-cgi', 'libfcgi-graal', 'test-cli'
 include 'test-cgi', 'cgi-servlet-container', 'test-javalin'
 include 'logback-native-patch'
-

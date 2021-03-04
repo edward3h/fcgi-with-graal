@@ -1,7 +1,8 @@
+plugins {
+    id 'org.ethelred.graal.in.docker.plugin' version '0.2'
+}
 
-apply plugin: 'my_native'
-
-my_native {
+graalDocker {
     dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.HelloWorld"
     appName = "helloworld"

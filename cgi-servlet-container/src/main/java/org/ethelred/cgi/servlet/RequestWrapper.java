@@ -1,6 +1,7 @@
 package org.ethelred.cgi.servlet;
 
 import io.netty.handler.codec.DateFormatter;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import org.ethelred.cgi.CgiParam;
 import org.ethelred.cgi.CgiRequest;
@@ -8,6 +9,7 @@ import org.ethelred.cgi.ParamName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckForNull;
 import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
@@ -25,17 +27,22 @@ import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,13 +63,15 @@ public class RequestWrapper implements HttpServletRequest
     private final HeaderHelper headerHelper;
     private final ServletContext servletContext;
     private final Map<String, Object> attributes = new HashMap<>();
+    private String baseContentType;
     private Charset charset = StandardCharsets.ISO_8859_1; // this is the default
     private boolean charsetIsDefault = true;
-    private static final Pattern CHARSET_PARAMETER = Pattern.compile("\\bcharset=([^ ;]+)");
+    private static final Pattern CONTENT_TYPE_PATTERN = Pattern.compile("^([^ ;]+).*\\bcharset=([^ ;]+)");
+    public static final Set<String> METHOD_WITH_BODY = Set.of("POST", "PUT", "PATCH");
 
     private boolean inputOpened = false;
 
-    private Map<String, String[]> parameters;
+    private Map<String, List<String>> parameters;
 
     public RequestWrapper(CgiRequest cgiRequest, ServletContext servletContext)
     {
@@ -75,18 +84,23 @@ public class RequestWrapper implements HttpServletRequest
 
         cgiRequest.getOptionalParam(CgiParam.CONTENT_TYPE)
                 .ifPresent(h -> {
-                    Matcher m = CHARSET_PARAMETER.matcher(h);
+                    Matcher m = CONTENT_TYPE_PATTERN.matcher(h);
                     if (m.find())
                     {
                         try
                         {
-                            charset = Charset.forName(m.group(1));
+                            baseContentType = m.group(1);
+                            charset = Charset.forName(m.group(2));
                             charsetIsDefault = false;
                         }
                         catch (Exception e)
                         {
                             LOGGER.error("Error reading charset from " + h, e);
                         }
+                    }
+                    else
+                    {
+                        baseContentType = h;
                     }
                 });
     }
@@ -116,6 +130,49 @@ public class RequestWrapper implements HttpServletRequest
      */
     private void _parseParameters()
     {
+        if (parameters == null)
+        {
+            parameters = new HashMap<>();
+            _parseParameters(parameters, cgiRequest.getParam(CgiParam.QUERY_STRING));
+            LOGGER.debug("_parseParameters check body method={} content type={} inputOpened={}", getMethod(), baseContentType, inputOpened);
+            if (METHOD_WITH_BODY.contains(getMethod()) &&
+                    HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.contentEquals(baseContentType) &&
+                    !inputOpened)
+            {
+                try
+                {
+                    var w = new StringWriter();
+                    getReader().transferTo(w);
+                    _parseParameters(parameters, w.toString());
+                }
+                catch (IOException e)
+                {
+                    LOGGER.error("Failed to read parameters from request body", e);
+                }
+            }
+        }
+    }
+
+    private void _parseParameters(Map<String, List<String>> parameterMap, @CheckForNull String input)
+    {
+        LOGGER.debug("_parseParameters input={}", input);
+        if (input == null || input.isBlank())
+        {
+            return;
+        }
+        String[] parameters = input.split("&");
+        for (var parameter: parameters)
+        {
+            var pair = parameter.split("=", 2);
+            if (pair.length == 1)
+            {
+                parameterMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(String.valueOf(true));
+            }
+            else if (pair.length == 2)
+            {
+                parameterMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(URLDecoder.decode(pair[1], charset));
+            }
+        }
 
     }
 
@@ -171,7 +228,7 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public String getMethod()
     {
-        return cgiRequest.getParam(CgiParam.REQUEST_METHOD);
+        return cgiRequest.getRequiredParam(CgiParam.REQUEST_METHOD);
     }
 
     @Override
@@ -403,13 +460,20 @@ public class RequestWrapper implements HttpServletRequest
     public String[] getParameterValues(String name)
     {
         _parseParameters();
-        return parameters.get(name);
+        var values = parameters.get(name);
+        return values == null ? null : values.toArray(String[]::new);
     }
 
     @Override
     public Map<String, String[]> getParameterMap()
     {
-        return Map.copyOf(parameters);
+        _parseParameters();
+        return parameters.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        e -> e.getKey(),
+                        e -> e.getValue().toArray(String[]::new)
+                ));
     }
 
     @Override

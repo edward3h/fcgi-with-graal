@@ -13,7 +13,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/cgi-api" />
             <option value="$PROJECT_DIR$/cgi-servlet-container" />
             <option value="$PROJECT_DIR$/libfcgi-graal" />

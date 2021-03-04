@@ -1,8 +1,10 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-apply plugin: 'my_native'
+plugins {
+    id 'org.ethelred.graal.in.docker.plugin' version '0.2'
+}
 
-my_native {
+graalDocker {
     dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.test1.RawServer"
     appName = "test.fcgi"
