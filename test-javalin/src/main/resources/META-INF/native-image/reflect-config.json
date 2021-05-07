@@ -45,6 +45,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.github.javafaker.Name",
+  "allPublicMethods":true
+},
+{
   "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -52,7 +56,7 @@
   "name":"gg.jte.TemplateEngine"
 },
 {
-  "name":"gg.jte.generated.JteindexGenerated",
+  "name":"gg.jte.generated.precompiled.JtethingsGenerated",
   "allDeclaredMethods":true
 },
 {
@@ -80,6 +84,9 @@
 },
 {
   "name":"java.security.SecurityPermission"
+},
+{
+  "name":"java.util.Map"
 },
 {
   "name":"java.util.PropertyPermission"

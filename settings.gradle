@@ -1,6 +1,6 @@
 pluginManagement {
     repositories {
-// uncomment for local plugin testing       mavenLocal()
+        mavenLocal()
         gradlePluginPortal()
     }
 }

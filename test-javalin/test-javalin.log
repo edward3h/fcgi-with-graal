@@ -1,78 +1,242 @@
-[36m02:38:12.601[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+[36m03:13:40.967[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
 java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
 	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
 	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
-	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:28)
-	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:23)
-[36m02:38:13.116[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REQUEST_URI=/javalin.fcgi, REMOTE_ADDR=192.168.0.3, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi, SCRIPT_NAME=/javalin.fcgi, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=, HTTP_UPGRADE_INSECURE_REQUESTS=1, GATEWAY_INTERFACE=CGI/1.1, SERVER_PORT=80, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTEXT_PREFIX=, CONTENT_LENGTH=0, QUERY_STRING=, HOSTNAME=2dc701da359f, REQUEST_SCHEME=http, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_SEC_GPC=1, HTTP_ACCEPT_ENCODING=gzip, deflate, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
-[36m02:38:15.259[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
-Request: GET [/javalin.fcgi]
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:34)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+[36m03:13:42.548[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_NAME=/javalin.fcgi, REQUEST_METHOD=GET, SCRIPT_URI=http://example.com/javalin.fcgi/things, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTEXT_PREFIX=, CONTENT_LENGTH=0, QUERY_STRING=, HOSTNAME=b21bcd38b4be, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, REQUEST_SCHEME=http, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_SEC_GPC=1, HTTP_ACCEPT_ENCODING=gzip, deflate, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
+[36m03:13:42.985[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
+Request: GET [/javalin.fcgi/things]
     Matching endpoint-handlers: []
-    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REQUEST_URI=/javalin.fcgi, REMOTE_ADDR=192.168.0.3, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi, SCRIPT_NAME=/javalin.fcgi, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, GATEWAY_INTERFACE=CGI/1.1, SERVER_PORT=80, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=2dc701da359f, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
+    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_NAME=/javalin.fcgi, REQUEST_METHOD=GET, SCRIPT_URI=http://example.com/javalin.fcgi/things, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=b21bcd38b4be, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
     Cookies: {}
     Body: 
     QueryString: 
     QueryParams: {}
     FormParams: {}
-Response: [200], execution took 1932.88 ms
-    Headers: {Set-Cookie=, Server=Javalin, X-Powered-By=cgi-servlet-container, Content-Type=text/html; charset=ISO-8859-1}
-    Body is 270 bytes (starts on next line):
+Response: [200], execution took 251.17 ms
+    Headers: {X-Powered-By=cgi-servlet-container, Content-Type=text/html; charset=ISO-8859-1, Set-Cookie=, Server=Javalin}
+    Body is 1098 bytes (starts on next line):
     
 
 <html>
 <head>
     
-        <meta name="description" content="Some kinda text.">
+        <meta name="description" content="A list of things.">
     
-    <title>Welcome to hello</title>
+    <title>List of things</title>
 </head>
 <body>
 <div class="navbar">
 </div>
-<h1>Welcome to hello</h1>
+<h1>List of things</h1>
 <div class="content">
     
-    <p>Some kinda text.</p>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Colour</th></tr>
+        </thead>
+        <tbody>
+    
+        <tr><td>1</td><td>Phebe Lehner</td><td>tan</td></tr>
+    
+        <tr><td>2</td><td>Ocie Balistreri</td><td>black</td></tr>
+    
+        <tr><td>3</td><td>Verdie Spinka I</td><td>turquoise</td></tr>
+    
+        <tr><td>4</td><td>Isaiah Gibson</td><td>gold</td></tr>
+    
+        <tr><td>5</td><td>Brenda Lang</td><td>silver</td></tr>
+    
+        <tr><td>6</td><td>Anton Jones</td><td>pink</td></tr>
+    
+        <tr><td>7</td><td>Tommy Waters</td><td>salmon</td></tr>
+    
+        <tr><td>8</td><td>Rodolfo Cummerata</td><td>green</td></tr>
+    
+        <tr><td>9</td><td>Leandro Windler</td><td>indigo</td></tr>
+    
+        <tr><td>10</td><td>Miss Houston Fahey</td><td>pink</td></tr>
+    
+        </tbody>
+    </table>
 
 </div>
 </body>
 </html>
 ----------------------------------------------------------------------------------
-[36m03:00:12.783[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+[36m03:19:45.559[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
 java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
 	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
 	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
-	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:31)
-	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:26)
-[36m03:00:13.367[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi, SCRIPT_NAME=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTEXT_PREFIX=, CONTENT_LENGTH=0, QUERY_STRING=, HOSTNAME=2653698c1a2a, REQUEST_SCHEME=http, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_SEC_GPC=1, HTTP_ACCEPT_ENCODING=gzip, deflate, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
-[36m03:00:13.832[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
-Request: GET [/javalin.fcgi]
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:34)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+[36m03:19:48.577[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SCRIPT_NAME=/javalin.fcgi, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTENT_LENGTH=0, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=c941fcedf579, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, REQUEST_SCHEME=http, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_SEC_GPC=1, HTTP_ACCEPT_ENCODING=gzip, deflate, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
+[36m03:19:49.068[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mio.javalin.Javalin[0;39m - Uncaught exception
+gg.jte.TemplateException: Failed to render things.jte
+	at gg.jte.TemplateEngine.handleRenderException(TemplateEngine.java:289)
+	at gg.jte.TemplateEngine.render(TemplateEngine.java:233)
+	at io.javalin.plugin.rendering.template.JavalinJte.render(JavalinJte.kt:33)
+	at io.javalin.plugin.rendering.JavalinRenderer.renderBasedOnExtension(JavalinRenderer.kt:43)
+	at io.javalin.http.Context.render(Context.kt:485)
+	at org.ethelred.techtest.test2.TestJavalin.lambda$_setupJavalin$2(TestJavalin.java:64)
+	at io.javalin.core.security.SecurityUtil.noopAccessManager(SecurityUtil.kt:23)
+	at io.javalin.http.JavalinServlet$addHandler$protectedHandler$1.handle(JavalinServlet.kt:121)
+	at io.javalin.http.JavalinServlet$service$2$1.invoke(JavalinServlet.kt:45)
+	at io.javalin.http.JavalinServlet$service$2$1.invoke(JavalinServlet.kt:24)
+	at io.javalin.http.JavalinServlet$service$1.invoke(JavalinServlet.kt:129)
+	at io.javalin.http.JavalinServlet$service$2.invoke(JavalinServlet.kt:40)
+	at io.javalin.http.JavalinServlet.service(JavalinServlet.kt:81)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:790)
+	at org.ethelred.cgi.servlet.CgiServletContainer.handleRequest(CgiServletContainer.java:78)
+	at org.ethelred.cgi.plain.PlainCgiServer.start(PlainCgiServer.java:32)
+	at org.ethelred.cgi.servlet.CgiServletContainer.start(CgiServletContainer.java:68)
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:45)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+Caused by: java.lang.ExceptionInInitializerError: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at gg.jte.runtime.Template.renderMap(Template.java:49)
+	at gg.jte.TemplateEngine.render(TemplateEngine.java:231)
+	... 17 common frames omitted
+Caused by: java.lang.NullPointerException: null
+	at gg.jte.runtime.BinaryContent.read(BinaryContent.java:31)
+	at gg.jte.runtime.BinaryContent.load(BinaryContent.java:17)
+	at gg.jte.generated.precompiled.JtethingsGenerated.<clinit>(JtethingsGenerated.java:7)
+	... 23 common frames omitted
+[36m03:19:49.468[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
+Request: GET [/javalin.fcgi/things]
     Matching endpoint-handlers: []
-    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi, SCRIPT_NAME=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=2653698c1a2a, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
+    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SCRIPT_NAME=/javalin.fcgi, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=c941fcedf579, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
     Cookies: {}
     Body: 
     QueryString: 
     QueryParams: {}
     FormParams: {}
-Response: [200], execution took 250.14 ms
-    Headers: {Server=Javalin, X-Powered-By=cgi-servlet-container, Content-Type=text/html; charset=ISO-8859-1, Set-Cookie=}
-    Body is 270 bytes (starts on next line):
+Response: [500], execution took 497.90 ms
+    Headers: {X-Powered-By=cgi-servlet-container, Status=500, Server=Javalin, Content-Type=text/plain; charset=ISO-8859-1, Set-Cookie=}
+    Body is 21 bytes (starts on next line):
+    Internal server error
+----------------------------------------------------------------------------------
+[36m03:25:25.032[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
+	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
+	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:34)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+[36m03:25:26.288[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SCRIPT_NAME=/javalin.fcgi, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTEXT_PREFIX=, CONTENT_LENGTH=0, QUERY_STRING=, HOSTNAME=07d1e647f7a3, REQUEST_SCHEME=http, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_ACCEPT_ENCODING=gzip, deflate, HTTP_SEC_GPC=1, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
+[36m03:25:26.569[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mio.javalin.Javalin[0;39m - Uncaught exception
+gg.jte.TemplateException: Failed to render things.jte
+	at gg.jte.TemplateEngine.handleRenderException(TemplateEngine.java:289)
+	at gg.jte.TemplateEngine.render(TemplateEngine.java:233)
+	at io.javalin.plugin.rendering.template.JavalinJte.render(JavalinJte.kt:33)
+	at io.javalin.plugin.rendering.JavalinRenderer.renderBasedOnExtension(JavalinRenderer.kt:43)
+	at io.javalin.http.Context.render(Context.kt:485)
+	at org.ethelred.techtest.test2.TestJavalin.lambda$_setupJavalin$2(TestJavalin.java:64)
+	at io.javalin.core.security.SecurityUtil.noopAccessManager(SecurityUtil.kt:23)
+	at io.javalin.http.JavalinServlet$addHandler$protectedHandler$1.handle(JavalinServlet.kt:121)
+	at io.javalin.http.JavalinServlet$service$2$1.invoke(JavalinServlet.kt:45)
+	at io.javalin.http.JavalinServlet$service$2$1.invoke(JavalinServlet.kt:24)
+	at io.javalin.http.JavalinServlet$service$1.invoke(JavalinServlet.kt:129)
+	at io.javalin.http.JavalinServlet$service$2.invoke(JavalinServlet.kt:40)
+	at io.javalin.http.JavalinServlet.service(JavalinServlet.kt:81)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:790)
+	at org.ethelred.cgi.servlet.CgiServletContainer.handleRequest(CgiServletContainer.java:78)
+	at org.ethelred.cgi.plain.PlainCgiServer.start(PlainCgiServer.java:32)
+	at org.ethelred.cgi.servlet.CgiServletContainer.start(CgiServletContainer.java:68)
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:45)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+Caused by: java.lang.ExceptionInInitializerError: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at gg.jte.runtime.Template.renderMap(Template.java:49)
+	at gg.jte.TemplateEngine.render(TemplateEngine.java:231)
+	... 17 common frames omitted
+Caused by: java.lang.NullPointerException: null
+	at gg.jte.runtime.BinaryContent.read(BinaryContent.java:31)
+	at gg.jte.runtime.BinaryContent.load(BinaryContent.java:17)
+	at gg.jte.generated.precompiled.JtethingsGenerated.<clinit>(JtethingsGenerated.java:7)
+	... 23 common frames omitted
+[36m03:25:26.753[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
+Request: GET [/javalin.fcgi/things]
+    Matching endpoint-handlers: []
+    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SCRIPT_NAME=/javalin.fcgi, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, SERVER_PORT=80, GATEWAY_INTERFACE=CGI/1.1, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=07d1e647f7a3, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
+    Cookies: {}
+    Body: 
+    QueryString: 
+    QueryParams: {}
+    FormParams: {}
+Response: [500], execution took 289.68 ms
+    Headers: {Status=500, X-Powered-By=cgi-servlet-container, Set-Cookie=, Content-Type=text/plain; charset=ISO-8859-1, Server=Javalin}
+    Body is 21 bytes (starts on next line):
+    Internal server error
+----------------------------------------------------------------------------------
+[36m03:26:24.026[0;39m [1;30m[main][0;39m [31mWARN [0;39m [35mo.e.cgi.graal.CgiServerFactory[0;39m - Error evaluating CGI type, will default to plain CGI
+java.lang.UnsatisfiedLinkError: 'int org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI()'
+	at org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_IsCGI(Native Method)
+	at org.ethelred.cgi.graal.CgiServerFactory.get(CgiServerFactory.java:26)
+	at org.ethelred.techtest.test2.TestJavalin.run(TestJavalin.java:34)
+	at org.ethelred.techtest.test2.TestJavalin.main(TestJavalin.java:29)
+[36m03:26:27.201[0;39m [1;30m[main][0;39m [39mDEBUG[0;39m [35mo.e.cgi.plain.SystemCgiRequest[0;39m - Env = {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_NAME=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, HTTP_UPGRADE_INSECURE_REQUESTS=1, GATEWAY_INTERFACE=CGI/1.1, SERVER_PORT=80, SCRIPT_FILENAME=/javalin.fcgi, HTTP_ACCEPT_LANGUAGE=en-US,en;q=0.9, HTTP_HOST=example.com, CONTEXT_PREFIX=, CONTENT_LENGTH=0, QUERY_STRING=, HOSTNAME=01bf5242a61d, REQUEST_SCHEME=http, HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9, HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, HTTP_SEC_GPC=1, HTTP_ACCEPT_ENCODING=gzip, deflate, SERVER_ADDR=192.168.0.2, HOME=/root, HTTP_CONNECTION=close}
+[36m03:26:27.916[0;39m [1;30m[main][0;39m [34mINFO [0;39m [35mio.javalin.Javalin[0;39m - JAVALIN REQUEST DEBUG LOG:
+Request: GET [/javalin.fcgi/things]
+    Matching endpoint-handlers: []
+    Headers: {PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, SERVER_PROTOCOL=HTTP/1.1, JAVA_HOME=/root/.sdkman/candidates/java/current, REMOTE_ADDR=192.168.0.3, REQUEST_URI=/javalin.fcgi/things, User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36, Accept-Encoding=gzip, deflate, REMOTE_PORT=52716, SCRIPT_URL=/javalin.fcgi/things, SCRIPT_NAME=/javalin.fcgi, SCRIPT_URI=http://example.com/javalin.fcgi/things, REQUEST_METHOD=GET, SDKMAN_DIR=/root/.sdkman, HTTP_DNT=1, SERVER_NAME=example.com, PATH_INFO=/things, Content-Length=0, HTTP_UPGRADE_INSECURE_REQUESTS=1, GATEWAY_INTERFACE=CGI/1.1, SERVER_PORT=80, SCRIPT_FILENAME=/javalin.fcgi, Accept=text/html, Connection=close, Host=example.com, CONTEXT_PREFIX=, QUERY_STRING=, HOSTNAME=01bf5242a61d, REQUEST_SCHEME=http, HTTP_SEC_GPC=1, Accept-Language=en-US,en;q=0.9, SERVER_ADDR=192.168.0.2, HOME=/root}
+    Cookies: {}
+    Body: 
+    QueryString: 
+    QueryParams: {}
+    FormParams: {}
+Response: [200], execution took 483.97 ms
+    Headers: {Set-Cookie=, Content-Type=text/html; charset=ISO-8859-1, X-Powered-By=cgi-servlet-container, Server=Javalin}
+    Body is 1098 bytes (starts on next line):
     
 
 <html>
 <head>
     
-        <meta name="description" content="Some kinda text.">
+        <meta name="description" content="A list of things.">
     
-    <title>Welcome to hello</title>
+    <title>List of things</title>
 </head>
 <body>
 <div class="navbar">
 </div>
-<h1>Welcome to hello</h1>
+<h1>List of things</h1>
 <div class="content">
     
-    <p>Some kinda text.</p>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Colour</th></tr>
+        </thead>
+        <tbody>
+    
+        <tr><td>1</td><td>Phebe Lehner</td><td>tan</td></tr>
+    
+        <tr><td>2</td><td>Ocie Balistreri</td><td>black</td></tr>
+    
+        <tr><td>3</td><td>Verdie Spinka I</td><td>turquoise</td></tr>
+    
+        <tr><td>4</td><td>Isaiah Gibson</td><td>gold</td></tr>
+    
+        <tr><td>5</td><td>Brenda Lang</td><td>silver</td></tr>
+    
+        <tr><td>6</td><td>Anton Jones</td><td>pink</td></tr>
+    
+        <tr><td>7</td><td>Tommy Waters</td><td>salmon</td></tr>
+    
+        <tr><td>8</td><td>Rodolfo Cummerata</td><td>green</td></tr>
+    
+        <tr><td>9</td><td>Leandro Windler</td><td>indigo</td></tr>
+    
+        <tr><td>10</td><td>Miss Houston Fahey</td><td>pink</td></tr>
+    
+        </tbody>
+    </table>
 
 </div>
 </body>

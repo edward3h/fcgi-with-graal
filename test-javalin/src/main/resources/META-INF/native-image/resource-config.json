@@ -1,5 +1,7 @@
 {
   "resources":[
+    {"pattern":"\\Qen/color.yml\\E"}, 
+    {"pattern":"\\Qen/name.yml\\E"}, 
     {"pattern":"\\Qlogback.xml\\E"}, 
     {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
   ],

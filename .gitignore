@@ -5,3 +5,4 @@
 build
 
 local.gradle
+/test-javalin/jte-classes/

@@ -4,15 +4,17 @@ import java.nio.file.Paths
 
 plugins {
     id 'org.ethelred.graal.in.docker.plugin' version '0.2'
-    id 'gg.jte.gradle' version '1.7.0'
+    id 'gg.jte.gradle' version '1.8.1-SNAPSHOT'
 }
 
 dependencies {
     implementation group: 'io.javalin', name: 'javalin', version: '3.13.3'
-    implementation group: 'gg.jte', name: 'jte', version: '1.8.0'
+    implementation group: 'gg.jte', name: 'jte', version: '1.8.1-SNAPSHOT'
     implementation("org.immutables:value:2.8.2")
     annotationProcessor("org.immutables:value:2.8.2")
     implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch')
+
+    implementation 'com.github.javafaker:javafaker:1.0.2' // for stubbing
 }
 
 graalDocker {
@@ -35,17 +37,17 @@ graalDocker {
             "HTTP_UPGRADE_INSECURE_REQUESTS": "1",
             "HTTP_USER_AGENT": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36",
             "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-            "PATH_INFO": "",
+            "PATH_INFO": "/things",
             "QUERY_STRING": "",
             "REMOTE_ADDR": "192.168.0.3",
             "REMOTE_PORT": "52716",
             "REQUEST_METHOD": "GET",
             "REQUEST_SCHEME": "http",
-            "REQUEST_URI": "/javalin.fcgi",
+            "REQUEST_URI": "/javalin.fcgi/things",
             "SCRIPT_FILENAME": "/javalin.fcgi",
             "SCRIPT_NAME": "/javalin.fcgi",
-            "SCRIPT_URI": "http://example.com/javalin.fcgi",
-            "SCRIPT_URL": "/javalin.fcgi",
+            "SCRIPT_URI": "http://example.com/javalin.fcgi/things",
+            "SCRIPT_URL": "/javalin.fcgi/things",
             "SERVER_ADDR": "192.168.0.2",
             "SERVER_NAME": "example.com",
             "SERVER_PORT": "80",
@@ -60,7 +62,7 @@ tasks.generateJte {
 //    binaryStaticContent = true
 }
 
-sourceSets.main.java.srcDirs += tasks.generateJte.targetDirectory
+sourceSets.main.java.srcDir(tasks.generateJte.targetDirectory)
 
 tasks.compileJava {
     dependsOn(tasks.generateJte)
