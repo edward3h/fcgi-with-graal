@@ -4,10 +4,10 @@ plugins {
 
 dependencies {
     // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-    api 'javax.servlet:javax.servlet-api:3.1.0'
+    api 'javax.servlet:javax.servlet-api:4.0.1'
     implementation project(":cgi-api")
     // https://mvnrepository.com/artifact/io.netty/netty-codec-http
-    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.66.Final'
 
 
 }

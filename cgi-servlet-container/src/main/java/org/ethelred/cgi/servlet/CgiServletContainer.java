@@ -283,6 +283,11 @@ public class CgiServletContainer implements CgiHandler
         }
 
         @Override
+        public ServletRegistration.Dynamic addJspFile(String servletName, String jspFile) {
+            return null;
+        }
+
+        @Override
         public <T extends Servlet> T createServlet(Class<T> clazz) throws ServletException
         {
             throw new UnsupportedOperationException("CgiServletContext.createServlet");
@@ -406,6 +411,36 @@ public class CgiServletContainer implements CgiHandler
         public String getVirtualServerName()
         {
             throw new UnsupportedOperationException("CgiServletContext.getVirtualServerName");
+        }
+
+        @Override
+        public int getSessionTimeout() {
+            return 0;
+        }
+
+        @Override
+        public void setSessionTimeout(int sessionTimeout) {
+
+        }
+
+        @Override
+        public String getRequestCharacterEncoding() {
+            return null;
+        }
+
+        @Override
+        public void setRequestCharacterEncoding(String encoding) {
+
+        }
+
+        @Override
+        public String getResponseCharacterEncoding() {
+            return null;
+        }
+
+        @Override
+        public void setResponseCharacterEncoding(String encoding) {
+
         }
     }
 }

@@ -8,10 +8,10 @@ plugins {
 }
 
 dependencies {
-    implementation group: 'io.javalin', name: 'javalin', version: '3.13.3'
+    implementation group: 'io.javalin', name: 'javalin', version: '3.13.10'
     implementation group: 'gg.jte', name: 'jte', version: '1.11.1'
-    implementation("org.immutables:value:2.8.2")
-    annotationProcessor("org.immutables:value:2.8.2")
+    implementation("org.immutables:value:2.8.8")
+    annotationProcessor("org.immutables:value:2.8.8")
     implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch')
 
     implementation 'com.github.javafaker:javafaker:1.0.2' // for stubbing
