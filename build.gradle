@@ -22,11 +22,11 @@ subprojects {
     }
 
     dependencies {
-        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-        runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.31'
+        runtimeOnly("ch.qos.logback:logback-classic:1.2.4")
 
-        testImplementation 'org.codehaus.groovy:groovy-all:3.0.4'
-        testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+        testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
+        testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
     }
 
     test {
