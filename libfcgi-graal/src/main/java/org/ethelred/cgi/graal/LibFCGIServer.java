@@ -62,6 +62,7 @@ public class LibFCGIServer implements CgiServer
     {
         if (_checkTransition(State.CONSTRUCTED, State.INITIALIZED)) {
             FCGX_Init();
+            LOGGER.info("Initialized");
         }
     }
 
@@ -69,7 +70,9 @@ public class LibFCGIServer implements CgiServer
     public void start(CgiHandler handler)
     {
         if (_checkTransition(State.INITIALIZED, State.RUNNING)) {
+            Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
             startTime = Instant.now();
+            LOGGER.info("Started");
             Timer t = new Timer(true);
             t.scheduleAtFixedRate(new MetricsTask(), 0L, TimeUnit.MINUTES.toMillis(1L));
             while (state.get() == State.RUNNING) {
@@ -92,6 +95,7 @@ public class LibFCGIServer implements CgiServer
     public void shutdown()
     {
         if(_checkTransition(State.RUNNING, State.FINISHED)) {
+            LOGGER.info("Shutting down");
             executor.shutdown();
             FCGX_ShutdownPending();
         }
@@ -167,7 +171,6 @@ public class LibFCGIServer implements CgiServer
         public void run()
         {
             LOGGER.info("Metrics: uptime {} requests handled {}", Duration.between(startTime, Instant.now()), requestCounter.get());
-
         }
     }
 }
