@@ -3,6 +3,11 @@
 
 # Ignore Gradle build output directory
 build
+bin
 
 local.gradle
 /test-javalin/jte-classes/
+.settings
+.classpath
+.project
+node_modules

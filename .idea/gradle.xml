@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/test-cgi" />
             <option value="$PROJECT_DIR$/test-cli" />
             <option value="$PROJECT_DIR$/test-javalin" />
+            <option value="$PROJECT_DIR$/test-micronaut" />
           </set>
         </option>
       </GradleProjectSettings>

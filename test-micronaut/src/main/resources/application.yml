@@ -1,0 +1,16 @@
+micronaut:
+  application:
+    name: testMicronaut
+datasources:
+  default:
+    url: jdbc:mariadb://mysql3.ordoacerbus.com:3306/letsgo_demo
+    driverClassName: org.mariadb.jdbc.Driver
+    username: demo123
+    password: '!&z!#9B@Zi6Vck9'
+    dialect: MYSQL
+#    schema-generate: CREATE_DROP
+flyway:
+  enabled: true
+  datasources:
+    default:
+      enabled: false
