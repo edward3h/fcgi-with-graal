@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: testMicronaut
+  server:
+    port: 8081
 datasources:
   default:
     url: jdbc:mariadb://mysql3.ordoacerbus.com:3306/letsgo_demo

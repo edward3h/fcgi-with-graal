@@ -10,7 +10,7 @@ import org.ethelred.techtest.micronaut.model.UserRepository;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@Controller("/api/users")
 public class UserController {
     UserRepository userRepository;
     ForceRepository forceRepository;

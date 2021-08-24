@@ -1,7 +1,10 @@
 <template>
     <div>
-        <h1>Hello world </h1>
         <div v-if="loggedIn">
+            Hello, {{ name }}
+        </div>
+        <div v-else-if="userList == 'pending'">
+            Spinner
         </div>
         <div v-else-if="userList">
             <ul>
@@ -17,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -26,9 +29,11 @@ export default defineComponent({
         const store = useStore();
 
         return {
-            loggedIn: store.getters.loggedIn,
-            startLogin: store.dispatch('startLogin'),
-            userList: null
+            loggedIn: computed(() => store.getters.loggedIn),
+            startLogin: () => store.dispatch('startLogin'),
+            userList: computed(() => store.state.userList),
+            login: (user: any) => store.dispatch('login', user),
+            name: computed(() => store.state.user.name),
         }
     }
 })

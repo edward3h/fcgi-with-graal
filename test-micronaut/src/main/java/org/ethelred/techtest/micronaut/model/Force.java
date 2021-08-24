@@ -27,10 +27,9 @@ public class Force {
     @Relation(value = Relation.Kind.MANY_TO_ONE)
     private User player;
 
-    public Force(String name, String faction, User player) {
+    public Force(String name, String faction) {
         this.name = name;
         this.faction = faction;
-        this.player = player;
     }
 
     public String getFaction() {
@@ -44,4 +43,10 @@ public class Force {
     public User getPlayer() {
         return player;
     }
+
+    public void setPlayer(User player) {
+        this.player = player;
+    }
+
+
 }

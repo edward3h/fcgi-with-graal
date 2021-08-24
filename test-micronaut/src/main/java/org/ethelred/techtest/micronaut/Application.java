@@ -34,7 +34,9 @@ public class Application {
 
     @EventListener
     public void createTestData(StartupEvent e) {
-        _createTestUsers();
+        if (userRepository.count() < 1) {
+            _createTestUsers();
+        }
     }
 
     private void _createTestUsers() {
@@ -51,7 +53,8 @@ public class Application {
     private void _createTestForces(User player) {
         IntStream.rangeClosed(1, random.nextInt(5) + 1)
                 .forEach(i -> {
-                    var force = new Force(faker.cat().name(), faker.cat().breed(), player);
+                    var force = new Force(faker.cat().name(), faker.cat().breed());
+                    force.setPlayer(player);
                     forceRepository.save(force);
                 });
     }
