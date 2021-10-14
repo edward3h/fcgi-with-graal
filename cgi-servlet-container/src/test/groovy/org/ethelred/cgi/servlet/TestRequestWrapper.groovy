@@ -3,11 +3,12 @@ package org.ethelred.cgi.servlet
 import io.netty.handler.codec.http.HttpHeaderNames
 import io.netty.handler.codec.http.HttpHeaderValues
 import spock.lang.Specification
+import org.ethelred.cgi.TestCgiRequest
 
 class TestRequestWrapper extends Specification {
     def 'no request params'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "GET"])
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "GET")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)
@@ -18,7 +19,7 @@ class TestRequestWrapper extends Specification {
 
     def 'simple param get'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar"])
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)
@@ -30,7 +31,7 @@ class TestRequestWrapper extends Specification {
 
     def 'multivalued param get'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar&foo=baz"])
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar&foo=baz")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)
@@ -42,7 +43,7 @@ class TestRequestWrapper extends Specification {
 
     def 'more params get'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar&fruit=coconut&foo=baz"])
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "GET", QUERY_STRING: "foo=bar&fruit=coconut&foo=baz")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)
@@ -55,7 +56,7 @@ class TestRequestWrapper extends Specification {
 
     def 'simple param post'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "POST", CONTENT_TYPE: HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED as String], bodyValue: "foo=bar")
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "POST", CONTENT_TYPE: HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED as String, "foo=bar")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)
@@ -67,7 +68,7 @@ class TestRequestWrapper extends Specification {
 
     def 'mix query and body'() {
         given:
-        def cgiRequest = new StubCgiRequest(env: [REQUEST_METHOD: "POST", CONTENT_TYPE: HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED as String, QUERY_STRING: "foo=bar"], bodyValue: "fruit=coconut&foo=baz")
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "POST", CONTENT_TYPE: HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED as String, QUERY_STRING: "foo=bar", "fruit=coconut&foo=baz")
 
         when:
         def servletRequest = new RequestWrapper(cgiRequest, null)

@@ -46,6 +46,8 @@ public class LibFCGIServer implements CgiServer
     private Instant startTime;
     private final AtomicInteger requestCounter = new AtomicInteger();
 
+    private Callback callback = Callback.ignore();
+
     private boolean _checkTransition(State from, State to) {
         State actual = state.compareAndExchange(from, to);
         if (actual == from) {
@@ -63,6 +65,7 @@ public class LibFCGIServer implements CgiServer
         if (_checkTransition(State.CONSTRUCTED, State.INITIALIZED)) {
             FCGX_Init();
             LOGGER.info("Initialized");
+            this.callback = callback;
         }
     }
 
@@ -88,6 +91,7 @@ public class LibFCGIServer implements CgiServer
                     );
                 }
             }
+            callback.onCompleted();
         }
     }
 

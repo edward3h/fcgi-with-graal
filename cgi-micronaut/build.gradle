@@ -1,0 +1,33 @@
+plugins {
+    id "java-library"
+    id 'java-test-fixtures'
+}
+
+configurations {
+    testFixturesImplementation.extendsFrom(implementation)
+    testFixturesAnnotationProcessor.extendsFrom(annotationProcessor)
+}
+
+dependencies {
+    implementation project(":cgi-api")    
+    implementation project(":libfcgi-graal")
+    implementation group: "javax.inject", name: "javax.inject", version: "1"
+    
+    def micronautVersion = "3.0.0"
+    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+
+    implementation "io.micronaut:micronaut-inject:$micronautVersion"
+
+    implementation "io.micronaut:micronaut-context:$micronautVersion"
+    implementation "io.micronaut:micronaut-http-server:$micronautVersion"
+    implementation "io.micronaut:micronaut-router:$micronautVersion"
+
+    implementation "io.micronaut:micronaut-inject-java:$micronautVersion"
+
+    testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
+    testImplementation(testFixtures(project(":cgi-api")))
+    implementation(project(":standalone"))
+
+    implementation "io.micronaut.servlet:micronaut-servlet-core:$micronautVersion"
+    testImplementation "io.micronaut.test:micronaut-test-spock:$micronautVersion"
+}

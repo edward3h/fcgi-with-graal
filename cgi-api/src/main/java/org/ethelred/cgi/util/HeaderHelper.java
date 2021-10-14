@@ -1,4 +1,4 @@
-package org.ethelred.cgi.servlet;
+package org.ethelred.cgi.util;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -120,15 +120,19 @@ public class HeaderHelper
         return e.hasMoreElements() ? Optional.of(e.nextElement()) : Optional.empty();
     }
 
-    public Enumeration<String> getHeaders(String name)
-    {
+    public List<String> getAll(String name) {
         var k = name;
         if (!KNOWN_HEADERS.contains(name))
         {
             k = toEnvName(name);
         }
         var r = headers.get(k);
-        return r == null ? Collections.emptyEnumeration() : Collections.enumeration(r);
+        return r == null ? List.of() : r;
+    }
+
+    public Enumeration<String> getHeaders(String name)
+    {
+        return Collections.enumeration(getAll(name));
     }
 
     public Enumeration<String> getHeaderNames()

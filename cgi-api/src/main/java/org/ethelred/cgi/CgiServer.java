@@ -22,6 +22,7 @@ public interface CgiServer
 
     boolean isRunning();
 
+    @FunctionalInterface
     interface Callback {
         void onCompleted();
 

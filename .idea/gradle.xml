@@ -14,10 +14,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/cgi-api" />
+            <option value="$PROJECT_DIR$/cgi-micronaut" />
             <option value="$PROJECT_DIR$/cgi-servlet-container" />
             <option value="$PROJECT_DIR$/libfcgi-graal" />
             <option value="$PROJECT_DIR$/logback-native-patch" />
             <option value="$PROJECT_DIR$/plain-cgi" />
+            <option value="$PROJECT_DIR$/standalone" />
             <option value="$PROJECT_DIR$/test-cgi" />
             <option value="$PROJECT_DIR$/test-cli" />
             <option value="$PROJECT_DIR$/test-javalin" />

@@ -9,4 +9,6 @@ rootProject.name = 'fcgi-with-graal'
 include 'cgi-api', 'plain-cgi', 'libfcgi-graal', 'test-cli'
 include 'test-cgi', 'cgi-servlet-container', 'test-javalin'
 include 'logback-native-patch'
-include 'test-micronaut'
+include 'test-micronaut', 'cgi-micronaut'
+include 'standalone'
+
