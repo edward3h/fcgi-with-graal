@@ -6,8 +6,7 @@ package org.ethelred.cgi;
  * @author eharman
  * @since 2020-10-12
  */
-public enum CgiParam implements ParamName
-{
+public enum CgiParam implements ParamName {
     // have not yet attempted to add every supported variable name
     REQUEST_METHOD,
     QUERY_STRING,
@@ -16,8 +15,7 @@ public enum CgiParam implements ParamName
 
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name();
     }
 

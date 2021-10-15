@@ -2,6 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'org.ethelred.graal.in.docker.plugin' version '0.2'
+    id 'application'
 }
 
 graalDocker {
@@ -21,5 +22,5 @@ task deployPublic(type: Copy) {
 deploy.dependsOn(deployPublic)
 
 dependencies {
-    implementation project(":cgi-api"), project(":libfcgi-graal"), project(':logback-native-patch')
+    implementation project(":cgi-api"), project(":libfcgi-graal"), project(':logback-native-patch'), project(":standalone")
 }

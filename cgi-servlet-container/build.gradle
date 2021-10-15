@@ -8,5 +8,5 @@ dependencies {
     implementation project(":cgi-api")
     // https://mvnrepository.com/artifact/io.netty/netty-codec-http
     implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.66.Final'
-
+    testImplementation(testFixtures(project(":cgi-api")))
 }

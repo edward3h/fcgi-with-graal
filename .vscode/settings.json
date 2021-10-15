@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "netbeans.jdkhome": "/home/edward/.sdkman/candidates/java/current"
 }

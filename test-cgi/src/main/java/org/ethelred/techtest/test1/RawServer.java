@@ -6,7 +6,9 @@ import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.CgiServer;
 import org.ethelred.cgi.ParamName;
 import org.ethelred.cgi.graal.CgiServerFactory;
+import org.ethelred.cgi.standalone.StandaloneCgiServer;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,7 +29,12 @@ public class RawServer implements CgiHandler
 {
     public static void main(String[] args)
     {
-        var cgiServer = new CgiServerFactory().get();
+        CgiServer cgiServer;
+        if (args.length > 0 && "stand".equalsIgnoreCase(args[0])) {
+            cgiServer = new StandaloneCgiServer();
+    }  else {
+            cgiServer = new CgiServerFactory().get();
+    }
         cgiServer.init(CgiServer.Callback.ignore());
         cgiServer.start(new RawServer());
     }
@@ -114,10 +121,12 @@ public class RawServer implements CgiHandler
         out.println("Server error");
     }
 
-    private String  _readToString(InputStream body) throws IOException
+    private String  _readToString(@CheckForNull InputStream body) throws IOException
     {
         var writer = new StringWriter();
-        new InputStreamReader(body).transferTo(writer);
+        if (body != null) {
+            new InputStreamReader(body).transferTo(writer);
+        }
         return writer.toString();
     }
 }

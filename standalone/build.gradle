@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'org.ethelred'
+version '0.1'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation(project(":cgi-api"))
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    def JETTY_VERSION = '11.0.6'
+    implementation "org.eclipse.jetty:jetty-server:$JETTY_VERSION"
+    implementation "org.eclipse.jetty:jetty-servlet:$JETTY_VERSION"
+    implementation "org.eclipse.jetty.fcgi:fcgi-server:$JETTY_VERSION"
+
+    implementation 'com.github.edward3h.libnetty:libnetty-fastcgi:v2.2.6-buildhack3'
+    //implementation 'com.github.fmjsjx:libnetty-fastcgi:2.2.5'
+}
+
+test {
+    useJUnitPlatform()
+}

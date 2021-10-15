@@ -6,6 +6,7 @@ import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import org.ethelred.cgi.CgiParam;
 import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.ParamName;
+import org.ethelred.cgi.util.HeaderHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -16,15 +16,17 @@ subprojects {
     apply plugin: 'groovy' // groovy is used for tests only
 
     repositories {
-        jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
         mavenLocal()
     }
 
     dependencies {
-        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.31'
-        runtimeOnly("ch.qos.logback:logback-classic:1.2.4")
+        implementation 'org.slf4j:slf4j-api:2.0.0-alpha5'
+//        runtimeOnly("ch.qos.logback:logback-classic:1.2.4")
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
+        runtimeOnly 'org.slf4j:slf4j-simple:2.0.0-alpha5'
+
 
 
         testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'

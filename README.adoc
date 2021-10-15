@@ -29,3 +29,7 @@ Hello world app to test the native image build process.
 
 === test-javalin
 A test app built with https://javalin.io/[Javalin] deployed into cgi-servlet-container. https://jte.gg/[JTE] is used for pre-compiled templates which get built into the native image.
+
+== References
+* https://fastcgi-archives.github.io/FastCGI_Specification.html[FastCGI Specification]
+

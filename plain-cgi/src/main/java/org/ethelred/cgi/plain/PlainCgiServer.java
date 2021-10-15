@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class PlainCgiServer implements CgiServer
 {
     private final Logger LOGGER = LoggerFactory.getLogger(PlainCgiServer.class);
-    private Callback callback;
+    private Callback callback = Callback.ignore();
 
     @Override
     public void init(Callback callback)

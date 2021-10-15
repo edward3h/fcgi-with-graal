@@ -6,6 +6,7 @@ package org.ethelred.cgi;
  * @author eharman
  * @since 2020-10-27
  */
+@FunctionalInterface
 public interface ParamName
 {
     static ParamName httpHeader(CharSequence headerName) {

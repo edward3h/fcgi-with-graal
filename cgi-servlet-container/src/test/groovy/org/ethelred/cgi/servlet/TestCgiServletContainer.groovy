@@ -4,6 +4,7 @@ import groovy.transform.Memoized
 import org.ethelred.cgi.CgiHandler
 import org.ethelred.cgi.CgiRequest
 import org.ethelred.cgi.CgiServer
+import org.ethelred.cgi.TestCgiRequest
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServlet
@@ -55,7 +56,7 @@ class TestCgiServletContainer extends Specification {
         def container = new CgiServletContainer(server)
         def servlet = Mock(HttpServlet)
         container.servlet = servlet
-        def cgiRequest = new StubCgiRequest()
+        def cgiRequest = new TestCgiRequest()
         container.start()
 
         when:
