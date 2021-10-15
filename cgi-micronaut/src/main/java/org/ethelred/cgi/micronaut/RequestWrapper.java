@@ -225,7 +225,8 @@ public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
     private class CgiParameters extends ConvertibleMultiValuesMap<String> implements HttpParameters {
         CgiParameters() {
             super(
-                    Map.copyOf(queryStringParser.parse(cgiRequest, getCharacterEncoding()))
+                    Map.copyOf(queryStringParser.parse(cgiRequest, getCharacterEncoding())),
+                    conversionService
             );
         }
     }
