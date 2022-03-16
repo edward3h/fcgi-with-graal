@@ -3,6 +3,7 @@ package org.ethelred.cgi.servlet;
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.CgiServer;
+import org.ethelred.cgi.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class CgiServletContainer implements CgiHandler
     public CgiServletContainer(CgiServer server)
     {
         this.server = server;
-        server.init(CgiServer.Callback.ignore());
+        server.init(CgiServer.Callback.ignore(), Options.empty());
         servletContext = new CgiServletContext();
     }
 

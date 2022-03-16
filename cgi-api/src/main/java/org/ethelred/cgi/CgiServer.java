@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public interface CgiServer
 {
-    void init(Callback callback);
+    void init(Callback callback, Options options);
 
     void start(CgiHandler handler);
 

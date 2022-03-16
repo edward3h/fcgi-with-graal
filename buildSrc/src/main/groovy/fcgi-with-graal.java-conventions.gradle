@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'groovy' // groovy is used for tests only
+}
+
+ext {
+    imageName = "gffdb:test1"
+//    imageName = "ghcr.io/edward3h/graal-fcgi-fake-dh-builder:latest"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+//    mavenLocal()
+}
+
+dependencies {
+    implementation("ch.qos.logback:logback-classic:1.2.6")
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.9'
+    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task cleanBin(type: Delete) {
+    delete('bin')
+}
+
+clean.dependsOn(cleanBin)

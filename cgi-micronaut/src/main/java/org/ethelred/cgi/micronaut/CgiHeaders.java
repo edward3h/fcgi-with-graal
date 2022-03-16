@@ -33,12 +33,12 @@ public class CgiHeaders implements HttpHeaders {
 
     @Override
     public Set<String> names() {
-        return null;
+        return helper.names();
     }
 
     @Override
     public Collection<List<String>> values() {
-        throw new UnsupportedOperationException("This makes no sense to me");
+        return helper.values();
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiServer;
+import org.ethelred.cgi.Options;
 
 import javax.annotation.Nonnull;
 import javax.inject.Singleton;
@@ -40,7 +41,8 @@ public class CgiEmbeddedServer implements EmbeddedServer {
     @Override
     public EmbeddedServer start() {
         try {
-            cgiServer.init(this::_onCompleted);
+            var options = Options.of("server.port", httpServerConfiguration.getPort().orElse(8080));
+            cgiServer.init(this::_onCompleted, options);
             if (!applicationContext.isRunning()) {
                 applicationContext.start();
             }

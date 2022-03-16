@@ -10,6 +10,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -20,6 +22,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class FcgiServer {
+    private final static Logger LOGGER = LoggerFactory.getLogger(FcgiServer.class);
     private final NioEventLoopGroup group;
     private volatile CgiHandler cgiHandler = CgiHandler.NOT_IMPLEMENTED;
 
@@ -31,9 +34,9 @@ public class FcgiServer {
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 512)
                 .childOption(ChannelOption.TCP_NODELAY, true)
-                .childHandler(new ChannelInitializer<Channel>() {
+                .childHandler(new ChannelInitializer<>() {
                     @Override
-                    protected void initChannel(Channel ch) throws Exception {
+                    protected void initChannel(Channel ch) {
                         ch.pipeline()
                                 .addLast(encoder)
                                 .addLast(new FcgiMessageDecoder())
@@ -58,7 +61,8 @@ public class FcgiServer {
     class Handler extends SimpleChannelInboundHandler<FcgiMessage>{
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, FcgiMessage msg) throws Exception {
+        protected void channelRead0(ChannelHandlerContext ctx, FcgiMessage msg) {
+            LOGGER.debug("channelRead0 {}", msg);
             if (msg instanceof FcgiRequest) {
                 var r = (FcgiRequest) msg;
                 if (r.beginRequest().role() == FcgiRole.RESPONDER) {

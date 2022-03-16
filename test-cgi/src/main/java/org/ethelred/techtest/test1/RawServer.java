@@ -1,10 +1,6 @@
 package org.ethelred.techtest.test1;
 
-import org.ethelred.cgi.CgiHandler;
-import org.ethelred.cgi.CgiParam;
-import org.ethelred.cgi.CgiRequest;
-import org.ethelred.cgi.CgiServer;
-import org.ethelred.cgi.ParamName;
+import org.ethelred.cgi.*;
 import org.ethelred.cgi.graal.CgiServerFactory;
 import org.ethelred.cgi.standalone.StandaloneCgiServer;
 
@@ -35,7 +31,7 @@ public class RawServer implements CgiHandler
     }  else {
             cgiServer = new CgiServerFactory().get();
     }
-        cgiServer.init(CgiServer.Callback.ignore());
+        cgiServer.init(CgiServer.Callback.ignore(), Options.empty());
         cgiServer.start(new RawServer());
     }
 

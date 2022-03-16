@@ -1,0 +1,4 @@
+logger:
+  levels:
+    io.micronaut.context.condition: TRACE
+    org.ethelred.cgi.standalone: DEBUG

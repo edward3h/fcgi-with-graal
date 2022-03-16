@@ -1,5 +1,6 @@
 package org.ethelred.cgi.micronaut;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.micronaut.context.ApplicationContext;

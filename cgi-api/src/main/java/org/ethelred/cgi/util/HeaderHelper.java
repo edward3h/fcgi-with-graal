@@ -1,11 +1,6 @@
 package org.ethelred.cgi.util;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HeaderHelper
@@ -138,5 +133,13 @@ public class HeaderHelper
     public Enumeration<String> getHeaderNames()
     {
         return Collections.enumeration(headers.keySet());
+    }
+
+    public Set<String> names() {
+        return headers.keySet();
+    }
+
+    public Collection<List<String>> values() {
+        return headers.values();
     }
 }

@@ -4,6 +4,7 @@ import groovy.transform.Memoized
 import org.ethelred.cgi.CgiHandler
 import org.ethelred.cgi.CgiRequest
 import org.ethelred.cgi.CgiServer
+import org.ethelred.cgi.Options
 import org.ethelred.cgi.TestCgiRequest
 import spock.lang.Specification
 
@@ -20,7 +21,7 @@ class TestCgiServletContainer extends Specification {
         def container = new CgiServletContainer(server)
 
         then:
-        1 * server.init(_)
+        1 * server.init(_,_)
     }
 
     def 'container requires servlet to start'() {
@@ -70,7 +71,7 @@ class TestCgiServletContainer extends Specification {
         CgiHandler handler
 
         @Override
-        void init(Callback callback) {
+        void init(Callback callback, Options options) {
 
         }
 

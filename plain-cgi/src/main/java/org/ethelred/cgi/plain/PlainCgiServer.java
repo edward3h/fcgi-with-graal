@@ -2,6 +2,7 @@ package org.ethelred.cgi.plain;
 
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiServer;
+import org.ethelred.cgi.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class PlainCgiServer implements CgiServer
     private Callback callback = Callback.ignore();
 
     @Override
-    public void init(Callback callback)
+    public void init(Callback callback, Options options)
     {
         this.callback = callback;
     }

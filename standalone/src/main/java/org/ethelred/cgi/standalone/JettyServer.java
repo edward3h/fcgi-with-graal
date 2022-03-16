@@ -12,10 +12,10 @@ import static org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet.*;
 public class JettyServer {
     private final Server server;
 
-    public JettyServer(int fcgiPort) {
+    public JettyServer(int listenPort, int fcgiPort) {
         this.server = new Server();
         var connector = new ServerConnector(server, 1, 1);
-        connector.setPort(8080);
+        connector.setPort(listenPort);
 //        connector.setHost("localhost");
         server.addConnector(connector);
         var servletContextHandler = new ServletContextHandler();

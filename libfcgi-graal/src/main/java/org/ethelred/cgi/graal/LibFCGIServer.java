@@ -2,6 +2,7 @@ package org.ethelred.cgi.graal;
 
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiServer;
+import org.ethelred.cgi.Options;
 import org.ethelred.cgi.graal.libfcgi.FCGX_Request;
 import org.graalvm.nativeimage.StackValue;
 import org.slf4j.Logger;
@@ -60,7 +61,7 @@ public class LibFCGIServer implements CgiServer
 
 
     @Override
-    public void init(Callback callback)
+    public void init(Callback callback, Options options)
     {
         if (_checkTransition(State.CONSTRUCTED, State.INITIALIZED)) {
             FCGX_Init();

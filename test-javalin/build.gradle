@@ -3,8 +3,9 @@ import gg.jte.ContentType
 import java.nio.file.Paths
 
 plugins {
-    id 'org.ethelred.graal.in.docker.plugin' version '0.2'
+    id 'org.ethelred.graal.in.docker.plugin' version '0.6'
     id 'gg.jte.gradle' version '1.11.1'
+    id 'fcgi-with-graal.java-conventions'
 }
 
 dependencies {
