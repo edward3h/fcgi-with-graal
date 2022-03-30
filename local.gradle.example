@@ -1,7 +1,0 @@
-// Example config file for machine specific settings
-// Copy to 'local.gradle' and fill in as necessary
-
-ext {
-    remoteHost = 'example.com'
-    deployDir = ["test-cgi":"example/deploy"]
-}

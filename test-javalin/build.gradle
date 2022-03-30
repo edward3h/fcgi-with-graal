@@ -3,16 +3,16 @@ import gg.jte.ContentType
 import java.nio.file.Paths
 
 plugins {
-    id 'org.ethelred.graal.in.docker.plugin' version '0.6'
-    id 'gg.jte.gradle' version '1.11.1'
+    id 'org.ethelred.graal.in.docker.plugin' version '0.7'
+    id 'gg.jte.gradle' version '2.0.1'
     id 'fcgi-with-graal.java-conventions'
 }
 
 dependencies {
     implementation group: 'io.javalin', name: 'javalin', version: '3.13.10'
-    implementation group: 'gg.jte', name: 'jte', version: '1.11.1'
-    implementation("org.immutables:value:2.8.8")
-    annotationProcessor("org.immutables:value:2.8.8")
+    implementation group: 'gg.jte', name: 'jte', version: '2.0.1'
+    implementation('org.immutables:value:2.9.0')
+    annotationProcessor("org.immutables:value:2.9.0")
     implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch')
 
     implementation 'com.github.javafaker:javafaker:1.0.2' // for stubbing
@@ -22,8 +22,6 @@ graalDocker {
     dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.test2.TestJavalin"
     appName = "javalin.fcgi"
-    remoteHost = rootProject.remoteHost
-    deployDir = rootProject.deployDir["test-javalin"]
 
     generateNativeConfigEnvironment.putAll("CONTENT_LENGTH": "0",
             "CONTEXT_PREFIX": "",
@@ -55,11 +53,15 @@ graalDocker {
             "SERVER_PROTOCOL": "HTTP/1.1")
 }
 
+repositories {
+    mavenCentral()
+}
+
 // https://github.com/casid/jte/blob/master/DOCUMENTATION.md#using-the-application-class-loader-since-120
 tasks.generateJte {
     sourceDirectory = Paths.get(project.projectDir.absolutePath, "src", "main", "jte")
     contentType = ContentType.Html
-// TODO not release yet    packageName = "org.ethelred.techtest.test2.jte-generated"
+    packageName = "org.ethelred.techtest.test2.jte_generated"
 //    binaryStaticContent = true
 }
 
@@ -68,11 +70,3 @@ sourceSets.main.java.srcDir(tasks.generateJte.targetDirectory)
 tasks.compileJava {
     dependsOn(tasks.generateJte)
 }
-
-task deployPublic(type: Copy) {
-    from "src/main/resources/public"
-    into "$buildDir/deploy/"
-    filter(ReplaceTokens, tokens: [appName: "javalin.fcgi"])
-}
-
-deploy.dependsOn(deployPublic)

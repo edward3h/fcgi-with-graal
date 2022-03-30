@@ -4,7 +4,7 @@
 @param Page page
 @param List<Thing> things
 
-@tag.layout(page = page, content = @`
+@template.tag.layout(page = page, content = @`
     <table>
         <thead>
             <tr><th>ID</th><th>Name</th><th>Colour</th></tr>

@@ -5,13 +5,6 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.immutables/value/2.8.8/d99fa1e04af5a1fda42fa9412d68eb7fe17a1071/value-2.8.8.jar" />
-        </processorPath>
-        <module name="fcgi-with-graal.test-javalin.main" />
-      </profile>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut/micronaut-inject-java/3.3.0/15432678281e2a5e320503f275d23d7310984669/micronaut-inject-java-3.3.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut/micronaut-aop/3.3.0/7f5245006f509fdff4c1713f8e296f13b285f827/micronaut-aop-3.3.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut/micronaut-inject/3.3.0/6107a5187b3265d5556793e9f4ca60160752ab00/micronaut-inject-3.3.0.jar" />
@@ -58,6 +51,13 @@
         </processorPath>
         <module name="fcgi-with-graal.test-micronaut.test" />
         <module name="fcgi-with-graal.test-micronaut.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.immutables/value/2.9.0/36d6ea4ee2bd9eff08d201f4db1d18e1bbef221e/value-2.9.0.jar" />
+        </processorPath>
+        <module name="fcgi-with-graal.test-javalin.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />

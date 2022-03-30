@@ -1,16 +1,20 @@
 plugins {
-    id 'org.ethelred.graal.in.docker.plugin' version '0.6'
+    id 'org.ethelred.graal.in.docker.plugin' version '0.7'
     id 'fcgi-with-graal.java-conventions'
+}
+
+dependencies {
+    testImplementation "org.testcontainers:testcontainers:1.16.3"
+    testImplementation "org.testcontainers:spock:1.16.3"
 }
 
 graalDocker {
     dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.HelloWorld"
     appName = "helloworld"
-    remoteHost = rootProject.remoteHost
 }
 
 test {
-    dependsOn(deploy)
-    systemProperties(host: remoteHost, appName: "helloworld")
+    dependsOn(nativeImage)
+    systemProperties(appName:graalDocker.appName.get(), buildDir:project.buildDir)
 }

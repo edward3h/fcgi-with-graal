@@ -1,5 +1,7 @@
 package org.ethelred.techtest
 
+import org.testcontainers.containers.GenericContainer
+import org.testcontainers.spock.Testcontainers
 import spock.lang.Specification
 
 /**
@@ -7,16 +9,19 @@ import spock.lang.Specification
  *
  * @author eharman* @since 2021-02-07
  */
+@Testcontainers
 class TestHelloWorld extends Specification {
 
-    def 'running executable on deploy host prints hello world'() {
+    GenericContainer container = new GenericContainer<>("ghcr.io/edward3h/fake_dh:v0.1")
+    .withFileSystemBind("${System.getProperty("buildDir")}/deploy", "/app")
+
+    def 'running executable prints hello world'() {
         given:
-        def host = System.getProperty('host')
         def executable = System.getProperty('appName')
 
         when:
-        def command = "ssh $host ./$executable"
-        def result = command.execute().in.text
+        def command = "/app/$executable"
+        def result = container.execInContainer(command).stdout
 
         then:
         result == "Hello World!\n"

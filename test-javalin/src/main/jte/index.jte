@@ -2,6 +2,6 @@
 
 @param Page page
 
-@tag.layout(page = page, content = @`
+@template.tag.layout(page = page, content = @`
     <p>${page.getDescription()}</p>
 `)
