@@ -59,7 +59,20 @@
         </processorPath>
         <module name="fcgi-with-graal.test-javalin.main" />
       </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.soabase.record-builder/record-builder-processor/33/163fe77124a631cded71d573a690fef17d730edb/record-builder-processor-33.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup/javapoet/1.12.1/e0e49f502697522ef047470b117ff81edc9f9a07/javapoet-1.12.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.soabase.record-builder/record-builder-core/33/da117ce2477035b7db3c549c445eb2ad4c2a375e/record-builder-core-33.jar" />
+        </processorPath>
+        <module name="fcgi-with-graal.cgi-servlet-container.main" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="fcgi-with-graal.internal" target="17" />
+      <module name="fcgi-with-graal.internal.main" target="17" />
+      <module name="fcgi-with-graal.internal.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

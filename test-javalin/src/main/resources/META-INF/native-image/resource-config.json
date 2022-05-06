@@ -1,12 +1,27 @@
 {
-  "resources":[
-    {"pattern":"\\Qen/color.yml\\E"}, 
-    {"pattern":"\\Qen/name.yml\\E"}, 
-    {"pattern":"\\Qlogback.xml\\E"}, 
-    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
-  ],
+  "resources":{
+  "includes":[
+    {
+      "pattern":"\\Qen/color.yml\\E"
+    }, 
+    {
+      "pattern":"\\Qen/name.yml\\E"
+    }, 
+    {
+      "pattern":"\\Qlogback.xml\\E"
+    }, 
+    {
+      "pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+    }
+  ]},
   "bundles":[
-    {"name":"javax.servlet.LocalStrings"}, 
-    {"name":"javax.servlet.http.LocalStrings"}
+    {
+      "name":"javax.servlet.LocalStrings",
+      "locales":[""]
+    }, 
+    {
+      "name":"javax.servlet.http.LocalStrings",
+      "locales":[""]
+    }
   ]
 }

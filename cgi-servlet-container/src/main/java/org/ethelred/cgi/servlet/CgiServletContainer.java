@@ -41,10 +41,11 @@ public class CgiServletContainer implements CgiHandler
     private HttpServlet servlet;
     private final ServletContext servletContext;
 
-    public CgiServletContainer(CgiServer server)
+    public CgiServletContainer(CgiServer server, Options options)
     {
+        logger.info("CgiServletContainer [init] {}, {}", server, options);
         this.server = server;
-        server.init(CgiServer.Callback.ignore(), Options.empty());
+        server.init(CgiServer.Callback.ignore(), options);
         servletContext = new CgiServletContext();
     }
 
@@ -55,6 +56,7 @@ public class CgiServletContainer implements CgiHandler
 
     public void start()
     {
+        logger.info("CgiServletContainer start {}", servlet);
         if (servlet == null) {
             throw new IllegalStateException("No servlet has been set up.");
         }
@@ -72,11 +74,13 @@ public class CgiServletContainer implements CgiHandler
     @Override
     public void handleRequest(CgiRequest cgiRequest)
     {
+        logger.info("CgiServletContainer handleRequest {}", cgiRequest);
         var request = new RequestWrapper(cgiRequest, servletContext);
         var response = new ResponseWrapper(cgiRequest, request);
         try
         {
             servlet.service(request, response);
+            response.checkCommitted();
         }
         catch (ServletException | IOException e)
         {

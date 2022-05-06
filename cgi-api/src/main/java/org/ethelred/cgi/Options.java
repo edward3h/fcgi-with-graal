@@ -21,4 +21,13 @@ public class Options {
     public <T> T get(String key, T defaultValue) {
         return (T) values.getOrDefault(key, defaultValue);
     }
+    public <T> T get(String key) {
+        return (T) values.get(key);
+    }
+
+    @Override
+    public String toString() {
+        return "Options{" + values +
+                '}';
+    }
 }

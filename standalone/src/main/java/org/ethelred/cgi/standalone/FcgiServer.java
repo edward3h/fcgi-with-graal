@@ -15,8 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -83,6 +85,7 @@ public class FcgiServer {
                 else {
                     throw new IllegalArgumentException(String.valueOf(r.beginRequest().role()));
                 }
+                LOGGER.debug("channelRead0 end FcgiRequest");
             }
             else {
                 throw new IllegalArgumentException(String.valueOf(msg));

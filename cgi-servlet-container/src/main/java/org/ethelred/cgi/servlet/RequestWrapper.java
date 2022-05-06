@@ -7,47 +7,21 @@ import org.ethelred.cgi.CgiParam;
 import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.ParamName;
 import org.ethelred.cgi.util.HeaderHelper;
+import org.ethelred.util.function.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUpgradeHandler;
-import javax.servlet.http.Part;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static org.ethelred.cgi.servlet.Utils.ifNotNull;
 
 /**
  * Assume that this object is only used from a single request thread.
@@ -64,15 +38,13 @@ public class RequestWrapper implements HttpServletRequest
     private final HeaderHelper headerHelper;
     private final ServletContext servletContext;
     private final Map<String, Object> attributes = new HashMap<>();
-    private String baseContentType;
-    private Charset charset = StandardCharsets.ISO_8859_1; // this is the default
-    private boolean charsetIsDefault = true;
-    private static final Pattern CONTENT_TYPE_PATTERN = Pattern.compile("^([^ ;]+).*\\bcharset=([^ ;]+)");
+    private final Lazy<ContentType> contentType;
     public static final Set<String> METHOD_WITH_BODY = Set.of("POST", "PUT", "PATCH");
 
     private boolean inputOpened = false;
 
-    private Map<String, List<String>> parameters;
+    private final Lazy<StringStringList> parameters;
+    private final Lazy<MultipartHelper> multipartHelper;
 
     public RequestWrapper(CgiRequest cgiRequest, ServletContext servletContext)
     {
@@ -82,28 +54,9 @@ public class RequestWrapper implements HttpServletRequest
         this.nameToCookie = this.headerHelper.getOptionalHeader("Cookie")
                 .map(this::parseCookies)
                 .orElse(Collections.emptyMap());
-
-        cgiRequest.getOptionalParam(CgiParam.CONTENT_TYPE)
-                .ifPresent(h -> {
-                    Matcher m = CONTENT_TYPE_PATTERN.matcher(h);
-                    if (m.find())
-                    {
-                        try
-                        {
-                            baseContentType = m.group(1);
-                            charset = Charset.forName(m.group(2));
-                            charsetIsDefault = false;
-                        }
-                        catch (Exception e)
-                        {
-                            LOGGER.error("Error reading charset from " + h, e);
-                        }
-                    }
-                    else
-                    {
-                        baseContentType = h;
-                    }
-                });
+        contentType = Lazy.lazy(() -> cgiRequest.getOptionalParam(CgiParam.CONTENT_TYPE).map(ContentType::parse).orElse(null));
+        parameters = Lazy.lazy(this::_parseParameters);
+        multipartHelper = Lazy.lazy(this::_parseParts);
     }
 
     private Map<String, Cookie> parseCookies(String cookie)
@@ -118,9 +71,9 @@ public class RequestWrapper implements HttpServletRequest
     private Cookie nettyCookieToServletCookie(io.netty.handler.codec.http.cookie.Cookie cookie)
     {
         var r = new Cookie(cookie.name(), cookie.value());
-        r.setMaxAge(Math.toIntExact(cookie.maxAge()));
-        r.setDomain(cookie.domain());
-        r.setPath(cookie.path());
+        r.setMaxAge(cookie.maxAge() < 0 ? -1: Math.toIntExact(cookie.maxAge()));
+        ifNotNull(cookie.domain(), r::setDomain);
+        ifNotNull(cookie.path(), r::setPath);
         r.setHttpOnly(cookie.isHttpOnly());
         r.setSecure(cookie.isSecure());
         return r;
@@ -129,54 +82,64 @@ public class RequestWrapper implements HttpServletRequest
     /**
      * parameter parsing is lazy to allow for alternate ways of reading the request body
      */
-    private void _parseParameters()
+    private StringStringList _parseParameters()
     {
-        if (parameters == null)
-        {
-            parameters = new HashMap<>();
-            _parseParameters(parameters, cgiRequest.getParam(CgiParam.QUERY_STRING));
-            LOGGER.debug("_parseParameters check body method={} content type={} inputOpened={}", getMethod(), baseContentType, inputOpened);
-            if (METHOD_WITH_BODY.contains(getMethod()) &&
-                    HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.contentEquals(baseContentType) &&
-                    !inputOpened)
+        var ct = contentType.get();
+       var r = new StringStringList();
+            _parseParameters(r, ct, cgiRequest.getParam(CgiParam.QUERY_STRING));
+            if (METHOD_WITH_BODY.contains(getMethod()) && !inputOpened)
             {
+                if (ct == null) {
+                    return r;
+                }
                 try
                 {
+                    if (HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.contentEquals(ct.getMimetype()))
+            {
                     var w = new StringWriter();
                     getReader().transferTo(w);
-                    _parseParameters(parameters, w.toString());
+                    _parseParameters(r, ct, w.toString());
+            } else if (HttpHeaderValues.MULTIPART_FORM_DATA.contentEquals(ct.getMimetype()))
+                    {
+                        multipartHelper.get().addParameters(r);
+                    }
                 }
                 catch (IOException e)
                 {
                     LOGGER.error("Failed to read parameters from request body", e);
                 }
             }
-        }
+        return r;
     }
 
-    private void _parseParameters(Map<String, List<String>> parameterMap, @CheckForNull String input)
+    private MultipartHelper _parseParts() {
+        return new MultipartHelper(contentType, this::getInputStream);
+    }
+
+    private void _parseParameters(StringStringList parameterMap, @CheckForNull ContentType ct, @CheckForNull String input)
     {
         LOGGER.debug("_parseParameters input={}", input);
         if (input == null || input.isBlank())
         {
             return;
         }
-        String[] parameters = input.split("&");
+        var parameters = input.split("&");
         for (var parameter: parameters)
         {
             var pair = parameter.split("=", 2);
             if (pair.length == 1)
             {
-                parameterMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(String.valueOf(true));
+                parameterMap.add(pair[0], String.valueOf(true));
             }
             else if (pair.length == 2)
             {
-                parameterMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(URLDecoder.decode(pair[1], charset));
+                parameterMap.add(pair[0], URLDecoder.decode(pair[1], ContentType.safeCharset(ct)));
             }
         }
 
     }
 
+    @CheckForNull
     @Override
     public String getAuthType()
     {
@@ -198,6 +161,7 @@ public class RequestWrapper implements HttpServletRequest
 //        return -1;
     }
 
+    @CheckForNull
     @Override
     public String getHeader(String name)
     {
@@ -232,12 +196,14 @@ public class RequestWrapper implements HttpServletRequest
         return cgiRequest.getRequiredParam(CgiParam.REQUEST_METHOD);
     }
 
+    @CheckForNull
     @Override
     public String getPathInfo()
     {
         return cgiRequest.getParam(CgiParam.PATH_INFO);
     }
 
+    @CheckForNull
     @Override
     public String getPathTranslated()
     {
@@ -250,12 +216,14 @@ public class RequestWrapper implements HttpServletRequest
         return cgiRequest.getOptionalParam(CgiParam.SCRIPT_NAME).orElse("");
     }
 
+    @CheckForNull
     @Override
     public String getQueryString()
     {
         return cgiRequest.getParam(CgiParam.QUERY_STRING);
     }
 
+    @CheckForNull
     @Override
     public String getRemoteUser()
     {
@@ -268,6 +236,7 @@ public class RequestWrapper implements HttpServletRequest
         return false;
     }
 
+    @CheckForNull
     @Override
     public Principal getUserPrincipal()
     {
@@ -284,7 +253,17 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public String getRequestURI()
     {
-        return cgiRequest.getRequiredParam(ParamName.of("SCRIPT_URL")); // determined by experiment on my setup, not from spec
+        return cgiRequest.getRequiredParam(CgiParam.REQUEST_URI);
+
+    }
+
+    private void _debugEnv(CgiRequest cgiRequest) {
+        LOGGER.debug(
+                cgiRequest.getEnv().entrySet()
+                        .stream()
+                        .map(e -> "%32s: %s%n".formatted(e.getKey(), e.getValue()))
+                        .collect(Collectors.joining("", "\n", ""))
+        );
     }
 
     @Override
@@ -362,13 +341,13 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public Collection<Part> getParts() throws IOException, ServletException
     {
-        throw new UnsupportedOperationException("RequestWrapper.getParts");
+        return (Collection<Part>) multipartHelper.get().getParts();
     }
 
     @Override
     public Part getPart(String name) throws IOException, ServletException
     {
-        throw new UnsupportedOperationException("RequestWrapper.getPart");
+        return multipartHelper.get().getPart(name);
     }
 
     @Override
@@ -392,18 +371,13 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public String getCharacterEncoding()
     {
-        if (charsetIsDefault)
-        {
-            return null;
-        }
-        return charset.name();
+        return ContentType.safeCharset(contentType.get()).name();
     }
 
     @Override
     public void setCharacterEncoding(String env) throws UnsupportedEncodingException
     {
-        charset = Charset.forName(env);
-        charsetIsDefault = false;
+        throw new UnsupportedOperationException("setCharacterEncoding");
     }
 
     @Override
@@ -425,6 +399,7 @@ public class RequestWrapper implements HttpServletRequest
                 .orElse(-1L);
     }
 
+    @CheckForNull
     @Override
     public String getContentType()
     {
@@ -439,13 +414,13 @@ public class RequestWrapper implements HttpServletRequest
             throw new IllegalStateException("Input already read");
         }
         inputOpened = true;
-        return new ServletInputStreamWrapper(cgiRequest.getBody());
+        return new ServletInputStreamWrapper(Objects.requireNonNull(cgiRequest.getBody()));
     }
 
+    @CheckForNull
     @Override
     public String getParameter(String name)
     {
-        _parseParameters();
         String[] values = getParameterValues(name);
         return values == null ? null : values[0];
     }
@@ -453,23 +428,21 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public Enumeration<String> getParameterNames()
     {
-        _parseParameters();
-        return Collections.enumeration(parameters.keySet());
+        return Collections.enumeration(parameters.get().names());
     }
 
+    @CheckForNull
     @Override
     public String[] getParameterValues(String name)
     {
-        _parseParameters();
-        var values = parameters.get(name);
+        var values = parameters.get().values(name);
         return values == null ? null : values.toArray(String[]::new);
     }
 
     @Override
     public Map<String, String[]> getParameterMap()
     {
-        _parseParameters();
-        return parameters.entrySet()
+        return parameters.get().entries()
                 .stream()
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
@@ -486,7 +459,7 @@ public class RequestWrapper implements HttpServletRequest
     @Override
     public String getScheme()
     {
-        return cgiRequest.getParam(ParamName.of("REQUEST_SCHEME"));
+        return cgiRequest.getRequiredParam(ParamName.of("REQUEST_SCHEME"));
     }
 
     @Override
@@ -509,13 +482,13 @@ public class RequestWrapper implements HttpServletRequest
         throw new IllegalStateException("Input already read");
     }
     inputOpened = true;
-    return new BufferedReader(new InputStreamReader(Objects.requireNonNull(cgiRequest.getBody()), charset));
+    return new BufferedReader(new InputStreamReader(Objects.requireNonNull(cgiRequest.getBody()), ContentType.safeCharset(contentType.get())));
     }
 
     @Override
     public String getRemoteAddr()
     {
-        return cgiRequest.getParam(ParamName.of("REMOTE_ADDR"));
+        return cgiRequest.getRequiredParam(ParamName.of("REMOTE_ADDR"));
     }
 
     @Override

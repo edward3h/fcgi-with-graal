@@ -78,4 +78,29 @@ class TestRequestWrapper extends Specification {
         servletRequest.getParameterValues("foo") == ["bar", "baz"] as String[]
         servletRequest.parameterMap == ["foo":["bar", "baz"] as String[], "fruit":["coconut"] as String[]]
     }
+
+    def 'multipart form data'() {
+        given:
+        def cgiRequest = new TestCgiRequest(REQUEST_METHOD: "PUT",
+                CONTENT_TYPE: "multipart/form-data; boundary=----WebKitFormBoundaryscziUhw4zQjbPXtK",
+        """------WebKitFormBoundaryscziUhw4zQjbPXtK
+Content-Disposition: form-data; name="name"
+
+Rodolfo Cummerata
+------WebKitFormBoundaryscziUhw4zQjbPXtK
+Content-Disposition: form-data; name="colour"
+
+#b10606
+------WebKitFormBoundaryscziUhw4zQjbPXtK--
+""")
+
+        when:
+        def servletRequest = new RequestWrapper(cgiRequest, null)
+
+        then:
+        servletRequest.getParts().size() == 2
+        servletRequest.getPart("name").getContentType() == "text/plain"
+        servletRequest.getPart("name").inputStream.text == "Rodolfo Cummerata"
+
+    }
 }

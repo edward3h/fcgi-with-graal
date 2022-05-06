@@ -6,6 +6,7 @@ import org.ethelred.cgi.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -25,8 +26,9 @@ public class StandaloneCgiServer implements CgiServer {
     public void init(Callback callback, Options options) {
         LOGGER.debug("init");
         var listenPort = options.get("server.port", 8080);
+        Path files = options.get("static.files");
         this.callback = callback;
-        this.jettyServer = new JettyServer(listenPort, FCGI_PORT);
+        this.jettyServer = new JettyServer(listenPort, FCGI_PORT, files);
         this.fcgiServer = new FcgiServer(FCGI_PORT);
     }
 

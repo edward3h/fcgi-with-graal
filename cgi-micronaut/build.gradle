@@ -42,6 +42,7 @@ dependencies {
 
     implementation("io.netty:netty-codec-http:4.1.73.Final")
     implementation("ch.qos.logback:logback-classic:1.2.6")
+    implementation 'org.ethelred:ethelred_util:0.4'
 
 }
 

@@ -2,6 +2,8 @@ package org.ethelred.techtest.test2;
 
 import org.immutables.value.Value;
 
+import javax.annotation.Nullable;
+
 /**
  * example model
  */
@@ -9,6 +11,8 @@ import org.immutables.value.Value;
 public interface Thing
 {
     int id();
+    @Nullable
     String name();
+    @Nullable
     String colour();
 }

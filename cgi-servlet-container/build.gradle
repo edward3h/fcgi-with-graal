@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'fcgi-with-graal.java-conventions'
+    id 'antlr'
 }
 
 dependencies {
@@ -9,5 +10,13 @@ dependencies {
     implementation project(":cgi-api")
     // https://mvnrepository.com/artifact/io.netty/netty-codec-http
     implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.66.Final'
+    antlr 'org.antlr:antlr4:4.9.3'
     testImplementation(testFixtures(project(":cgi-api")))
+    implementation 'org.ethelred:ethelred_util:0.4'
+    compileOnly 'io.soabase.record-builder:record-builder-core:33'
+    annotationProcessor 'io.soabase.record-builder:record-builder-processor:33'
+}
+
+generateGrammarSource {
+    arguments = ["-package", "org.ethelred.cgi.servlet", "-lib", file("${projectDir}/src/main/antlr/org/ethelred/cgi/servlet").toString()]
 }

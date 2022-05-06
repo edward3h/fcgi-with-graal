@@ -23,6 +23,7 @@ import org.ethelred.cgi.CgiParam;
 import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.ParamName;
 import org.ethelred.cgi.util.QueryStringParser;
+import org.ethelred.util.function.*;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -35,7 +36,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
-import static org.ethelred.cgi.micronaut.Lazy.lazy;
+import static org.ethelred.util.function.Lazy.lazy;
 
 public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
     private static final QueryStringParser queryStringParser = new QueryStringParser();

@@ -82,6 +82,8 @@ public class HeaderHelper
                 ).stream())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+    private static final Set<String> BLACKLIST = Set.of("HTTP_ACCEPT_ENCODING");
+
     private static String toEnvName(String known)
     {
         return known.toUpperCase().replaceAll("-", "_");
@@ -92,6 +94,7 @@ public class HeaderHelper
     {
         headers = cgiRequestEnv.entrySet()
                 .stream()
+                .filter(e -> !BLACKLIST.contains(e.getKey()))
                 .collect(Collectors.toMap(this::mapKey, this::mapValue));
     }
 

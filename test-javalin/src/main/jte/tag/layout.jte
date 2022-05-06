@@ -9,6 +9,7 @@
     @if(page.getDescription() != null)
         <meta name="description" content="${page.getDescription()}">
     @endif
+    <link rel="stylesheet" href="/styles.css">
     <title>${page.getTitle()}</title>
 </head>
 <body>
@@ -18,5 +19,6 @@
 <div class="content">
     ${content}
 </div>
+<script src="/support.js"></script>
 </body>
 </html>

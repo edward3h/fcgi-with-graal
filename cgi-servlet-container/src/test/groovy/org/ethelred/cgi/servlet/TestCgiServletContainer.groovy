@@ -18,7 +18,7 @@ class TestCgiServletContainer extends Specification {
         def server = Mock(CgiServer)
 
         when:
-        def container = new CgiServletContainer(server)
+        def container = new CgiServletContainer(server, Options.empty())
 
         then:
         1 * server.init(_,_)
@@ -27,7 +27,7 @@ class TestCgiServletContainer extends Specification {
     def 'container requires servlet to start'() {
         given:
         def server = Mock(CgiServer)
-        def container = new CgiServletContainer(server)
+        def container = new CgiServletContainer(server, Options.empty())
 
         when:
         container.start()
@@ -39,7 +39,7 @@ class TestCgiServletContainer extends Specification {
     def 'container registers a handler'() {
         given:
         def server = Mock(CgiServer)
-        def container = new CgiServletContainer(server)
+        def container = new CgiServletContainer(server, Options.empty())
         def servlet = Mock(HttpServlet)
         container.servlet = servlet
 
@@ -54,7 +54,7 @@ class TestCgiServletContainer extends Specification {
     def 'cgi request results in servlet request'() {
         given:
         def server = new StubCgiServer()
-        def container = new CgiServletContainer(server)
+        def container = new CgiServletContainer(server, Options.empty())
         def servlet = Mock(HttpServlet)
         container.servlet = servlet
         def cgiRequest = new TestCgiRequest()

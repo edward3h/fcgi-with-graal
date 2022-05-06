@@ -1,4 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
 import gg.jte.ContentType
 import java.nio.file.Paths
 
@@ -6,14 +5,16 @@ plugins {
     id 'org.ethelred.graal.in.docker.plugin' version '0.7'
     id 'gg.jte.gradle' version '2.0.1'
     id 'fcgi-with-graal.java-conventions'
+    id 'application'
 }
 
 dependencies {
-    implementation group: 'io.javalin', name: 'javalin', version: '3.13.10'
+//    implementation group: 'io.javalin', name: 'javalin-without-jetty', version: '4.4.0'
+    implementation group: 'io.javalin', name: 'javalin', version: '4.4.0'
     implementation group: 'gg.jte', name: 'jte', version: '2.0.1'
     implementation('org.immutables:value:2.9.0')
     annotationProcessor("org.immutables:value:2.9.0")
-    implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch')
+    implementation project(':cgi-servlet-container'), project(':cgi-api'), project(':libfcgi-graal'), project(':logback-native-patch'), project(':standalone')
 
     implementation 'com.github.javafaker:javafaker:1.0.2' // for stubbing
 }
@@ -61,12 +62,34 @@ repositories {
 tasks.generateJte {
     sourceDirectory = Paths.get(project.projectDir.absolutePath, "src", "main", "jte")
     contentType = ContentType.Html
-    packageName = "org.ethelred.techtest.test2.jte_generated"
+//    packageName = "org.ethelred.techtest.test2.jte_generated"
 //    binaryStaticContent = true
+    generateNativeImageResources = true
 }
 
 sourceSets.main.java.srcDir(tasks.generateJte.targetDirectory)
 
 tasks.compileJava {
     dependsOn(tasks.generateJte)
+}
+
+tasks.processResources {
+    dependsOn(tasks.generateJte)
+    from(tasks.generateJte.targetResourceDirectory)
+}
+
+def prepareWeb = tasks.register('prepareWeb', Copy) {
+    dependsOn nativeImage
+    from("src/main/resources/public") {
+        filter { line -> line.replaceAll(/@appName@/, "${graalDocker.appName.get()}")}
+    }
+    from("${buildDir}/deploy") {
+        include "${graalDocker.appName.get()}"
+    }
+    into("${buildDir}/web")
+}
+
+application {
+    mainClass = 'org.ethelred.techtest.test2.TestJavalin'
+    applicationDefaultJvmArgs = ['-Dcgi.server=standalone', "-Dstatic.files=${projectDir}/src/main/resources/public"]
 }

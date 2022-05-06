@@ -7,8 +7,9 @@
             <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <root level="trace">
+    <logger name="org.ethelred.cgi" level="debug" />
+    <logger name="org.eclipse.jetty.server.handler" level="debug" />
+    <root level="info">
         <appender-ref ref="NORMAL" />
     </root>
 </configuration>

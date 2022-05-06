@@ -8,13 +8,12 @@ import org.ethelred.cgi.CgiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckForNull;
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -129,11 +128,15 @@ public class ResponseWrapper implements HttpServletResponse
     }
 
     @Override
-    public void sendError(int sc, String msg) throws IOException
+    public void sendError(int sc, @CheckForNull String msg) throws IOException
     {
         state.checkModifyHeaders();
         setIntHeader("Status", sc);
-        _writeHeaders();
+        try {
+            _writeHeaders();
+        } catch (ServletException e) {
+            throw new IOException(e);
+        }
         Utils.renderErrorPage(getWriter(), sc, msg);
     }
 
@@ -141,13 +144,14 @@ public class ResponseWrapper implements HttpServletResponse
     // https://tools.ietf.org/html/rfc3875#section-6
     private static final Set<String> CGI_REQUIRED_HEADERS = Set.of(CONTENT_TYPE, "Location", "Status");
 
-    private void _writeHeaders() throws IOException
-    {
+    private void _writeHeaders() throws IOException, ServletException {
         state.checkModifyHeaders();
-        headers.put(CONTENT_TYPE, List.of(getContentType()));
+        if (getContentType() != null) {
+            headers.put(CONTENT_TYPE, List.of(getContentType()));
+        }
         if (headers.keySet().stream().noneMatch(CGI_REQUIRED_HEADERS::contains))
         {
-            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS + " headers");
+            throw new ServletException("Must specify at least one of " + CGI_REQUIRED_HEADERS + " headers");
         }
         state = ResponseState.WROTE_HEADERS;
         var cookieStrings = ServerCookieEncoder.LAX.encode(
@@ -162,9 +166,11 @@ public class ResponseWrapper implements HttpServletResponse
                     w.print(name);
                     w.print(": ");
                     w.println(String.join(", ", values));
+                    LOGGER.debug("{}: {}", name, values);
                 }
         );
         w.println();
+        w.flush();
     }
 
     private io.netty.handler.codec.http.cookie.Cookie servletCookieToNettyCookie(Cookie cookie)
@@ -189,7 +195,11 @@ public class ResponseWrapper implements HttpServletResponse
     {
         state.checkModifyHeaders();
         setHeader("Location", location);
-        _writeHeaders();
+        try {
+            _writeHeaders();
+        } catch (ServletException e) {
+            throw new IOException(e);
+        }
         // body is empty
         getWriter();
     }
@@ -239,13 +249,14 @@ public class ResponseWrapper implements HttpServletResponse
     @Override
     public void setStatus(int sc)
     {
+        LOGGER.debug("setStatus({})", sc);
         setIntHeader("Status", sc);
     }
 
     @Override
     public void setStatus(int sc, String sm)
     {
-        setStatus(sc);
+        throw new UnsupportedOperationException("setStatus(int, String) deprecated");
     }
 
     @Override
@@ -259,6 +270,7 @@ public class ResponseWrapper implements HttpServletResponse
         return Integer.parseInt(values.get(0));
     }
 
+    @CheckForNull
     @Override
     public String getHeader(String name)
     {
@@ -293,6 +305,7 @@ public class ResponseWrapper implements HttpServletResponse
         return Objects.requireNonNullElse(charset, StandardCharsets.ISO_8859_1).name();
     }
 
+    @CheckForNull
     @Override
     public String getContentType()
     {
@@ -308,7 +321,13 @@ public class ResponseWrapper implements HttpServletResponse
     {
         if (output == null)
         {
-            _writeHeaders();
+            LOGGER.debug("getOutputStream()");
+            try {
+                _writeHeaders();
+            } catch (ServletException e) {
+                sendError(500, e.getMessage());
+                return new ServletOutputStreamWrapper(OutputStream.nullOutputStream());
+            }
             state.checkDoOutput();
             state = ResponseState.COMMITTED;
             output = new ServletOutputStreamWrapper(cgiRequest.getOutput());
@@ -325,12 +344,24 @@ public class ResponseWrapper implements HttpServletResponse
             {
                 charset = StandardCharsets.ISO_8859_1;
             }
-            _writeHeaders();
+            LOGGER.debug("getWriter()");
+            try {
+                _writeHeaders();
+            } catch (ServletException e) {
+                sendError(500, e.getMessage());
+                return new PrintWriter(Writer.nullWriter());
+            }
             state.checkDoOutput();
             state = ResponseState.COMMITTED;
             writer = new PrintWriter(cgiRequest.getOutput(), false, charset);
         }
         return writer;
+    }
+
+    public void checkCommitted() throws IOException {
+        if (!isCommitted()) {
+            getWriter().print("");
+        }
     }
 
     @Override
