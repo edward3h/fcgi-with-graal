@@ -1,13 +1,21 @@
 = FCGI with Graal
 Edward <jaq@ethelred.org>
-v0.1, 2021-02-22
+v0.2, 2022-05-06
 
-This is my third in a series of attempts to be able to write web services in Java but still have them run on my basic shared hosting account. The most performant API available in that environment seems to be FCGI. I'm using Graal Native Image to target it.
+This is my third in a series of attempts to be able to write web services in Java but still have them run on my basic shared hosting account.
+The most performant API available in that environment seems to be FCGI.
+I'm using Graal Native Image to target it.
+
+_Still under heavy development, don't expect stability for now_
 
 == Current Modules
 
 === cgi-api
 Java interfaces for building a CGI web app against - pretty low level.
+
+=== cgi-micronaut
+Micronaut server support on top of cgi-api. Based on micronaut-servlet.
+No websocket support and minimal reactive programming support _because it's CGI!_
 
 === cgi-servlet-container
 Java Servlet support on top of cgi-api. link:cgi-servlet-container/README.md[With some big limitations!]
@@ -21,6 +29,9 @@ This is a workaround for a build issue with using Logback file appenders in Graa
 === plain-cgi
 Implementation of cgi-api using basic CGI semantics - environment variables, standard in and out.
 
+=== standalone
+Implementation of cgi-api in a standalone Java server application, mainly for testing because if you can run a Java server you probably don't want the restrictions of this library!
+
 === test-cgi
 Test web app built on cgi-api.
 
@@ -29,6 +40,9 @@ Hello world app to test the native image build process.
 
 === test-javalin
 A test app built with https://javalin.io/[Javalin] deployed into cgi-servlet-container. https://jte.gg/[JTE] is used for pre-compiled templates which get built into the native image.
+
+=== test-micronaut
+A test app built on Micronaut.
 
 == References
 * https://fastcgi-archives.github.io/FastCGI_Specification.html[FastCGI Specification]
