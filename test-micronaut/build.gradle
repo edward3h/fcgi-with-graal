@@ -42,6 +42,7 @@ dependencies {
 
 application {
     mainClass.set("org.ethelred.techtest.micronaut.Application")
+    applicationDefaultJvmArgs = ['-Dcgi.server=standalone']
 }
 
 

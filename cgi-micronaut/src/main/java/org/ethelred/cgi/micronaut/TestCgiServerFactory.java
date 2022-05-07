@@ -8,10 +8,12 @@ import org.ethelred.cgi.standalone.StandaloneCgiServer;
 
 import javax.inject.Singleton;
 
+/**
+ * This is the fallback case when the requirements on MicronautCgiServerFactory are not met.
+ */
 @Factory
 public class TestCgiServerFactory {
     @Singleton
-    @Requires(env = "test")
     public CgiServer cgiServer() {
         return new StandaloneCgiServer();
     }
