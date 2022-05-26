@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.2.4")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation group: 'org.graalvm.sdk', name: 'graal-sdk', version: '21.2.0'
 }
