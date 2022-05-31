@@ -1,1 +1,0 @@
-throw new UnsupportedOperationException("${SIMPLE_CLASS_NAME}.${METHOD_NAME}");

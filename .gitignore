@@ -11,3 +11,5 @@ local.gradle
 .classpath
 .project
 node_modules
+
+.idea
