@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    testImplementation "org.testcontainers:testcontainers:1.16.3"
+    testImplementation "org.testcontainers:testcontainers:1.17.2"
     testImplementation "org.testcontainers:spock:1.16.3"
 }
 
