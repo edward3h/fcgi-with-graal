@@ -13,3 +13,6 @@ local.gradle
 node_modules
 
 .idea
+cgi-servlet-container/src/main/antlr/org/ethelred/cgi/servlet/HttpLexer.tokens
+cgi-servlet-container/src/main/antlr/org/ethelred/cgi/servlet/gen
+cgi-servlet-container/src/main/gen
