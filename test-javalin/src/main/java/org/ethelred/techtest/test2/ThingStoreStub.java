@@ -1,12 +1,13 @@
 package org.ethelred.techtest.test2;
 
-import com.github.javafaker.Faker;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import net.datafaker.Faker;
 
 public class ThingStoreStub implements ThingStore
 {

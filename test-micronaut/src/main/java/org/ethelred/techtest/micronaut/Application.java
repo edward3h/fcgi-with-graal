@@ -1,19 +1,21 @@
 package org.ethelred.techtest.micronaut;
+import java.util.Random;
+import java.util.stream.IntStream;
 
-import com.github.javafaker.Faker;
-import com.github.vatbub.randomusers.Generator;
-import com.github.vatbub.randomusers.result.RandomUser;
-import io.micronaut.context.event.StartupEvent;
-import io.micronaut.runtime.Micronaut;
-import io.micronaut.runtime.event.annotation.EventListener;
+import javax.inject.Inject;
+
 import org.ethelred.techtest.micronaut.model.Force;
 import org.ethelred.techtest.micronaut.model.ForceRepository;
 import org.ethelred.techtest.micronaut.model.User;
 import org.ethelred.techtest.micronaut.model.UserRepository;
 
-import javax.inject.Inject;
-import java.util.Random;
-import java.util.stream.IntStream;
+import com.github.vatbub.randomusers.Generator;
+import com.github.vatbub.randomusers.result.RandomUser;
+
+import io.micronaut.context.event.StartupEvent;
+import io.micronaut.runtime.Micronaut;
+import io.micronaut.runtime.event.annotation.EventListener;
+import net.datafaker.Faker;
 
 public class Application {
 
