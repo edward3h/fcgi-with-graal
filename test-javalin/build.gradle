@@ -10,7 +10,7 @@ plugins {
 
 dependencies {
 //    implementation group: 'io.javalin', name: 'javalin-without-jetty', version: '4.4.0'
-    implementation group: 'io.javalin', name: 'javalin', version: '4.6.0'
+    implementation group: 'io.javalin', name: 'javalin', version: '4.6.3'
     implementation group: 'gg.jte', name: 'jte', version: '2.0.3'
     implementation('org.immutables:value:2.9.0')
     annotationProcessor("org.immutables:value:2.9.0")
