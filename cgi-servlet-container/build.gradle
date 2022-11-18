@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'fcgi-with-graal.java-conventions'
     id 'antlr'
+    id 'fcgi-with-graal.publishing-conventions'
 }
 
 dependencies {
@@ -19,4 +20,9 @@ dependencies {
 
 generateGrammarSource {
     arguments = ["-package", "org.ethelred.cgi.servlet", "-lib", file("${projectDir}/src/main/antlr/org/ethelred/cgi/servlet").toString()]
+}
+
+tasks.named('sourcesJar') {
+    dependsOn("generateGrammarSource")
+    duplicatesStrategy 'exclude'
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'fcgi-with-graal.java-conventions'
+    id 'fcgi-with-graal.publishing-conventions'
 }
 
 group 'org.ethelred'

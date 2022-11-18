@@ -1,0 +1,56 @@
+plugins {
+    id 'maven-publish'
+    id 'signing'
+}
+
+group = rootProject.group
+version = rootProject.version
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'Ethelred CGI'
+                description = 'CGI and FCGI in Java'
+                url = 'https://github.com/edward3h/fcgi-with-graal'
+                licenses {
+                    license {
+                        name = 'GNU General Public License, Version 3'
+                        url = 'https://choosealicense.com/licenses/gpl-3.0/'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Edward Harman'
+                        email = 'jaq@ethelred.org'
+                    }
+                }
+                scm {
+                    connection = "https://github.com/edward3h/fcgi-with-graal.git"
+                    developerConnection = "git@github.com:edward3h/fcgi-with-graal.git"
+                    url = "https://github.com/edward3h/fcgi-with-graal"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.maven
+}

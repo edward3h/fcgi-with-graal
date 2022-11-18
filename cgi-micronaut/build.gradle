@@ -2,6 +2,7 @@ plugins {
     id "java-library"
     id 'java-test-fixtures'
     id 'fcgi-with-graal.java-conventions'
+    id 'fcgi-with-graal.publishing-conventions'
 }
 
 configurations {
