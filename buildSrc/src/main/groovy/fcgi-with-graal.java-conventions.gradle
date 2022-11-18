@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    imageName = "gffdb:test1"
+//    imageName = "gffdb:test1"
 //    imageName = "ghcr.io/edward3h/graal-fcgi-fake-dh-builder:latest"
 }
 

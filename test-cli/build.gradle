@@ -1,5 +1,5 @@
 plugins {
-    id 'org.ethelred.graal.in.docker.plugin' version '0.7'
+    id 'org.ethelred.graal.in.docker.plugin' version '0.8'
     id 'fcgi-with-graal.java-conventions'
 }
 
@@ -9,7 +9,7 @@ dependencies {
 }
 
 graalDocker {
-    dockerImageName = imageName
+//    dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.HelloWorld"
     appName = "helloworld"
 }

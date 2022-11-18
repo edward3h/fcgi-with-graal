@@ -1,13 +1,13 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'org.ethelred.graal.in.docker.plugin' version '0.7'
+    id 'org.ethelred.graal.in.docker.plugin' version '0.8'
     id 'application'
     id 'fcgi-with-graal.java-conventions'
 }
 
 graalDocker {
-    dockerImageName = imageName
+//    dockerImageName = imageName
     mainClassName ="org.ethelred.techtest.test1.RawServer"
     appName = "test.fcgi"
     if (rootProject.hasProperty("remoteHost")) {
