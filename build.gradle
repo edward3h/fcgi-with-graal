@@ -5,6 +5,11 @@ plugins {
 group = 'org.ethelred.cgi'
 version = '0.2'
 
+/*
+To publish, run
+gw publishToSonatype closeAndReleaseSonatypeStagingRepository
+ */
+
 nexusPublishing {
     repositories {
         sonatype {  //only for users registered in Sonatype after 24 Feb 2021
