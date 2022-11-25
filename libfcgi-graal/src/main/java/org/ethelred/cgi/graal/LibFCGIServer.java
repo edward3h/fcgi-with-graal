@@ -1,13 +1,5 @@
 package org.ethelred.cgi.graal;
 
-import org.ethelred.cgi.CgiHandler;
-import org.ethelred.cgi.CgiServer;
-import org.ethelred.cgi.Options;
-import org.ethelred.cgi.graal.libfcgi.FCGX_Request;
-import org.graalvm.nativeimage.StackValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Timer;
@@ -21,11 +13,18 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.ethelred.cgi.CgiHandler;
+import org.ethelred.cgi.CgiServer;
+import org.ethelred.cgi.Options;
+import org.ethelred.cgi.graal.libfcgi.FCGX_Request;
 import static org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_Accept_r;
 import static org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_Finish_r;
 import static org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_Init;
 import static org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_InitRequest;
 import static org.ethelred.cgi.graal.libfcgi.LibFCGI.FCGX_ShutdownPending;
+import org.graalvm.nativeimage.StackValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TODO
@@ -37,7 +36,7 @@ public class LibFCGIServer implements CgiServer
 {
     private final Logger LOGGER = LoggerFactory.getLogger(LibFCGIServer.class);
 
-    private final ExecutorService executor = Executors.newWorkStealingPool();
+    private ExecutorService executor;
     private final Lock acceptLock = new ReentrantLock();
     private final Semaphore newJob = new Semaphore(1);
 
@@ -58,8 +57,6 @@ public class LibFCGIServer implements CgiServer
         return false;
     }
 
-
-
     @Override
     public void init(Callback callback, Options options)
     {
@@ -67,6 +64,17 @@ public class LibFCGIServer implements CgiServer
             FCGX_Init();
             LOGGER.info("Initialized");
             this.callback = callback;
+            this.executor = _configureExecutor(options);
+        }
+    }
+
+    private ExecutorService _configureExecutor(Options options) {
+        var threadCount = options.get("thread.count", 10);
+        var threadModel = options.get("thread.model", "default");
+        if (threadModel.equalsIgnoreCase("fixed")) {
+            return Executors.newFixedThreadPool(threadCount);
+        } else {
+            return Executors.newWorkStealingPool();
         }
     }
 

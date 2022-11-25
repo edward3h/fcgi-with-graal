@@ -1,12 +1,12 @@
 package org.ethelred.cgi.graal;
 
+import java.util.function.Supplier;
+
 import org.ethelred.cgi.CgiServer;
 import org.ethelred.cgi.graal.libfcgi.LibFCGI;
 import org.ethelred.cgi.plain.PlainCgiServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Supplier;
 
 /**
  * TODO
@@ -19,6 +19,7 @@ public class CgiServerFactory implements Supplier<CgiServer>
     protected final Logger LOGGER = LoggerFactory.getLogger(CgiServerFactory.class);
     private CgiServer instance;
 
+    @Override
     public synchronized CgiServer get() {
         if (instance == null) {
             try

@@ -1,0 +1,20 @@
+plugins {
+    id 'org.ethelred.graal.in.docker.plugin' version '0.8'
+    id 'application'
+    id 'fcgi-with-graal.java-conventions'
+    id 'fcgi-with-graal.deploy'
+}
+
+graalDocker {
+//    dockerImageName = imageName
+    mainClassName ="org.ethelred.techtest.test1.ConcurrencyTest"
+    appName = "test.fcgi"
+}
+
+dependencies {
+    implementation project(":cgi-api"), project(":libfcgi-graal"), project(':logback-native-patch'), project(":standalone")
+}
+
+application {
+    mainClass = "org.ethelred.techtest.client.ConcurrencyTestClient"
+}

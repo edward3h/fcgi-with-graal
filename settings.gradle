@@ -11,4 +11,4 @@ include 'test-cgi', 'cgi-servlet-container', 'test-javalin'
 include 'logback-native-patch'
 include 'test-micronaut', 'cgi-micronaut'
 include 'standalone'
-
+include 'test-concurrency'
