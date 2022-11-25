@@ -1,6 +1,14 @@
 package org.ethelred.cgi.standalone;
 
-import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet.SCRIPT_PATTERN_INIT_PARAM;
+import static org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet.SCRIPT_ROOT_INIT_PARAM;
 import org.eclipse.jetty.http.HttpContent;
 import org.eclipse.jetty.server.ResourceService;
 import org.eclipse.jetty.server.Server;
@@ -9,14 +17,6 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Map;
-
-import static org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet.*;
 
 public class JettyServer {
     private final Server server;
@@ -35,7 +35,7 @@ public class JettyServer {
         }
         container.addHandler(resources);
         var servletContextHandler = new ServletContextHandler();
-        var servletHolder = servletContextHandler.addServlet(FastCGIProxyServlet.class, "/*");
+        var servletHolder = servletContextHandler.addServlet(ExtFastCGIProxyServlet.class, "/*");
         servletHolder.setInitParameters(Map.of(
                 "proxyTo", "http://localhost:" + fcgiPort,
                 SCRIPT_ROOT_INIT_PARAM, "/virtual",

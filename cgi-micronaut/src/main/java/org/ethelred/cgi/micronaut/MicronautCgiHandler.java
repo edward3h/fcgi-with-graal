@@ -26,10 +26,8 @@ public class MicronautCgiHandler extends ServletHttpHandler<CgiRequest, CgiReque
 
     @Override
     protected ServletExchange<CgiRequest, CgiRequest> createExchange(CgiRequest request, CgiRequest response) {
-        return new DefaultServletExchange<>(
-                new RequestWrapper(request, getApplicationContext().getConversionService(), cookieDecoder, getMediaTypeCodecRegistry()),
-                new ResponseWrapper(request, getApplicationContext(), cookieEncoder)
-        );
+        var responseWrapper = new ResponseWrapper<>(request, getApplicationContext(), cookieEncoder);
+        return new RequestWrapper(request, responseWrapper, getApplicationContext().getConversionService(), cookieDecoder, getMediaTypeCodecRegistry());
     }
 
     @Override
@@ -37,4 +35,11 @@ public class MicronautCgiHandler extends ServletHttpHandler<CgiRequest, CgiReque
         service(cgiRequest, cgiRequest);
     }
 
+    @Override
+    public void service(ServletExchange<CgiRequest, CgiRequest> exchange) {
+        super.service(exchange);
+        if (exchange.getResponse() instanceof ResponseWrapper<? super Object> responseWrapper) {
+            responseWrapper.commit();
+        }
+    }
 }

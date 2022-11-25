@@ -4,9 +4,6 @@ plugins {
     id 'fcgi-with-graal.publishing-conventions'
 }
 
-group 'org.ethelred'
-version '0.1'
-
 repositories {
     mavenCentral()
 }
