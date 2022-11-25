@@ -1,6 +1,6 @@
-DirectoryIndex @appName@
+DirectoryIndex <%= appName %>
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ @appName@?page=$1 [QSA,L]
+RewriteRule ^(.*)\$ <%= appName %>?page=\$1 [QSA,L]
