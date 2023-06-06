@@ -257,6 +257,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
         @Override
         public MutableHttpHeaders add(CharSequence header, CharSequence value) {
+            LOGGER.info("Add Header {}={}", header, value);
             state.checkModifyHeaders();
             return delegate.add(header, value);
         }
