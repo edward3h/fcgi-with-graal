@@ -17,12 +17,14 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 public class JettyServer {
     private final Server server;
 
     public JettyServer(int listenPort, int fcgiPort, Path resourceBase) {
         this.server = new Server();
+        ((QueuedThreadPool) server.getThreadPool()).setName("standalone-jetty");
         var connector = new ServerConnector(server, 1, 1);
         connector.setPort(listenPort);
 //        connector.setHost("localhost");

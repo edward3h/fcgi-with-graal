@@ -15,7 +15,7 @@ public class ExtFastCGIProxyServlet extends FastCGIProxyServlet {
     protected void customizeFastCGIHeaders(Request proxyRequest, HttpFields fastCGIHeaders) {
         super.customizeFastCGIHeaders(proxyRequest, fastCGIHeaders);
         fastCGIHeaders.put("HTTP_AUTHORIZATION", proxyRequest.getHeaders().get(HttpHeader.AUTHORIZATION));
-        System.err.println("Poopoo " + proxyRequest.getHeaders().get(HttpHeader.AUTHORIZATION));   
+        System.err.println("Auth " + proxyRequest.getHeaders().get(HttpHeader.AUTHORIZATION));
     }
 
 }
