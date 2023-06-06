@@ -158,7 +158,7 @@ public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object>, S
             final Class<T> type = arg.getType();
             final MediaType contentType = getContentType().orElse(MediaType.APPLICATION_JSON_TYPE);
             long contentLength = getContentLength();
-            if (body == null && contentLength != 0) {
+            if (body == null && contentLength > 0) {
 
                 boolean isConvertibleValues = ConvertibleValues.class == type;
                 if (isFormSubmission(contentType)) {
