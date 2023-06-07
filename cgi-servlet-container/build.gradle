@@ -10,7 +10,7 @@ dependencies {
     api 'javax.servlet:javax.servlet-api:4.0.1'
     implementation project(":cgi-api")
     // https://mvnrepository.com/artifact/io.netty/netty-codec-http
-    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.78.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.93.Final'
     antlr 'org.antlr:antlr4:4.10.1'
     testImplementation(testFixtures(project(":cgi-api")))
     implementation 'org.ethelred:ethelred_util:0.4'
