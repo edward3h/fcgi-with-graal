@@ -46,7 +46,7 @@ public class CgiEmbeddedServer implements EmbeddedServer {
             if (!applicationContext.isRunning()) {
                 applicationContext.start();
             }
-            new Thread(() -> cgiServer.start(cgiHandler)).start();
+            new Thread(() -> cgiServer.start(cgiHandler), "cgi-server").start();
             applicationContext.publishEvent(new ServerStartupEvent(this));
         }
         catch (Exception e)

@@ -1,5 +1,6 @@
 plugins {
     id 'fcgi-with-graal.java-conventions'
+    id 'fcgi-with-graal.publishing-conventions'
 }
 
 dependencies {

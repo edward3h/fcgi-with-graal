@@ -3,6 +3,9 @@ package org.ethelred.cgi;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+Generic key-value holder for passing configuration to server implementations
+ */
 public class Options {
     public static Options empty() {
         return new Options();
@@ -12,6 +15,11 @@ public class Options {
         var o = new Options();
         o.values.put(key1, value1);
         return o;
+    }
+
+    public Options and(String key, Object value) {
+        values.put(key, value);
+        return this;
     }
 
     private Options() {}

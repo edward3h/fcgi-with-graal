@@ -1,0 +1,25 @@
+
+def deployPublic = tasks.register('deployPublic', Copy) {
+    from "src/main/resources/public"
+    into "$buildDir/deploy/"
+    expand(appName: project.extensions.getByName('graalDocker').appName.get())
+}
+
+String getDeployDir() {
+    if (project.hasProperty('remoteDir')) {
+        return "${project.remoteDir}/${project.name}"
+    }
+    return project.name
+}
+
+def makeDeployDir = tasks.register('makeDeployDir', Exec) {
+    onlyIf { project.hasProperty('remoteHost') }
+    commandLine "ssh", "${project.findProperty('remoteHost')}", "mkdir", "-p", deployDir
+}
+
+tasks.register('deploy', Exec) {
+    onlyIf { project.hasProperty('remoteHost') }
+    dependsOn(deployPublic, makeDeployDir, project.tasks.named('nativeImage'))
+    // I gave up on trying to use a Java ssh library
+    commandLine(["scp", "-r", project.fileTree("$buildDir/deploy/"){include '*'}.files, "${project.findProperty('remoteHost')}:${deployDir}/"].flatten())
+}

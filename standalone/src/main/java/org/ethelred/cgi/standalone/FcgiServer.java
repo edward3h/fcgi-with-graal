@@ -8,6 +8,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import org.ethelred.cgi.CgiHandler;
 import org.ethelred.cgi.CgiRequest;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class FcgiServer {
     // see https://github.com/fmjsjx/libnetty/tree/v2.x/libnetty-fastcgi
     public FcgiServer(int fcgiPort) {
         var encoder = new FcgiMessageEncoder();
-        this.group = new NioEventLoopGroup();
+        this.group = new NioEventLoopGroup(new DefaultThreadFactory("fcgi"));
         var b = new ServerBootstrap().group(group)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 512)

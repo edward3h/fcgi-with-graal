@@ -1,28 +1,38 @@
 package org.ethelred.cgi.micronaut;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
+
+import org.ethelred.cgi.CgiRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.ArgumentConversionContext;
 import io.micronaut.core.convert.value.MutableConvertibleValues;
 import io.micronaut.core.convert.value.MutableConvertibleValuesMap;
-import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MutableHttpHeaders;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.http.simple.SimpleHttpHeaders;
 import io.micronaut.servlet.http.ServletHttpResponse;
-import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
-import org.ethelred.cgi.CgiRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
-import java.io.*;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseWrapper.class);
@@ -42,6 +52,15 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
     private Object body;
     private HttpStatus status = HttpStatus.OK;
 
+    private final CountDownLatch commitLatch = new CountDownLatch(1);
+
+    public void awaitCommit() {
+        try {
+            commitLatch.await();
+        } catch (InterruptedException e) {
+            // ignore
+        }
+    }
 
     /*
     response states - initial -> wrote headers -> done
@@ -95,10 +114,11 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     private void writeHeaders() {
         state.checkModifyHeaders();
-        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains)) {
-            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
-        }
+//        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains) && status == HttpStatus.OK) {
+//            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
+//        }
         state = ResponseState.WROTE_HEADERS;
+        LOGGER.info("Writing headers", new Exception("Trace"));
         try (var w = new PrintWriter(cgiRequest.getOutput())) {
             w.print("Status: ");
             w.println(status.getCode());
@@ -117,6 +137,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
                         });
             }
             w.println();
+            commitLatch.countDown();
         }
     }
 
@@ -146,6 +167,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     @Override
     public MutableHttpResponse<B> cookie(Cookie cookie) {
+        LOGGER.info("Set cookie {}", cookie);
         state.checkModifyHeaders();
         cookies.put(cookie.getName(), cookie);
         return this;
@@ -159,6 +181,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     @Override
     public MutableHttpResponse<B> status(HttpStatus status, CharSequence message) {
+        LOGGER.info("set status {} [{}]", status, message, new Exception("Trace"));
         state.checkModifyHeaders();
         this.status = status;
         if (message != null) {
@@ -199,6 +222,46 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
         return (Optional<B>) Optional.ofNullable(body);
     }
 
+    /**
+     * ensure the output is written if it hasn't already been
+     */
+    public void commit() {
+        switch (state) {
+            case COMMITTED -> LOGGER.info("Already committed.");
+            case WROTE_HEADERS -> {
+                LOGGER.info("Already wrote headers.");
+                _commitOutput();
+            }
+            case INITIAL -> {
+                LOGGER.info("No output yet");
+                try (var w = getWriter()) {
+                    w.newLine();
+                } catch (IOException e) {
+                    LOGGER.error("Error in commit", e);
+                }
+            }
+        }
+    }
+
+    private void _commitOutput() {
+        try {
+            // already assigned output, but it could be a Writer or OutputStream
+            if (output instanceof OutputStream stream) {
+                try (stream) {
+                    stream.write('\n');
+                }
+            } else if (output instanceof Writer writer) {
+                try (writer) {
+                    writer.append('\n');
+                }
+            } else {
+                throw new IllegalStateException("Unexpected output state: " + (output == null ? "null" : output.getClass().getName()));
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error in _commitOutput", e);
+        }
+    }
+
     private class HeaderStateWrapper implements MutableHttpHeaders {
         private final MutableHttpHeaders delegate;
 
@@ -208,12 +271,14 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
         @Override
         public MutableHttpHeaders add(CharSequence header, CharSequence value) {
+            LOGGER.info("Add Header {}={}", header, value);
             state.checkModifyHeaders();
             return delegate.add(header, value);
         }
 
         @Override
         public MutableHttpHeaders remove(CharSequence header) {
+            LOGGER.warn("Remove Header {}", header);
             state.checkModifyHeaders();
             return delegate.remove(header);
         }

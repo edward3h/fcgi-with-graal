@@ -18,7 +18,9 @@ import io.micronaut.http.codec.MediaTypeCodec;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.http.cookie.Cookies;
+import io.micronaut.servlet.http.ServletExchange;
 import io.micronaut.servlet.http.ServletHttpRequest;
+import io.micronaut.servlet.http.ServletHttpResponse;
 import org.ethelred.cgi.CgiParam;
 import org.ethelred.cgi.CgiRequest;
 import org.ethelred.cgi.ParamName;
@@ -38,7 +40,7 @@ import java.util.function.Function;
 
 import static org.ethelred.util.function.Lazy.lazy;
 
-public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
+public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object>, ServletExchange<CgiRequest, CgiRequest> {
     private static final QueryStringParser queryStringParser = new QueryStringParser();
     private static final Cookies EMPTY_COOKIES = new EmptyCookies();
     private final CgiRequest cgiRequest;
@@ -51,13 +53,16 @@ public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
     private final Lazy<Cookies> cookies;
     private final ConversionService conversionService;
     private final MediaTypeCodecRegistry codecRegistry;
+    private final ResponseWrapper responseWrapper;
     private Object body;
 
     public RequestWrapper(CgiRequest cgiRequest,
+                          ResponseWrapper responseWrapper,
                           ConversionService conversionService,
                           Function<String, Cookies> cookieDecoder,
                           MediaTypeCodecRegistry codecRegistry) {
         this.cgiRequest = cgiRequest;
+        this.responseWrapper = responseWrapper;
         this.conversionService = conversionService;
         this.codecRegistry = codecRegistry;
         this.headers = new CgiHeaders(cgiRequest, conversionService);
@@ -65,6 +70,16 @@ public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
         this.parameters = lazy(CgiParameters::new);
         this.uri = lazy(() -> URI.create(cgiRequest.getRequiredParam(CgiParam.REQUEST_URI)));
         this.cookies = lazy(() -> cgiRequest.getOptionalParam(ParamName.httpHeader("Cookie")).map(cookieDecoder).orElse(EMPTY_COOKIES));
+    }
+
+    @Override
+    public ServletHttpRequest<CgiRequest, ? super Object> getRequest() {
+        return this;
+    }
+
+    @Override
+    public ServletHttpResponse<CgiRequest, ? super Object> getResponse() {
+        return responseWrapper;
     }
 
     @CheckForNull
@@ -143,7 +158,7 @@ public class RequestWrapper implements ServletHttpRequest<CgiRequest, Object> {
             final Class<T> type = arg.getType();
             final MediaType contentType = getContentType().orElse(MediaType.APPLICATION_JSON_TYPE);
             long contentLength = getContentLength();
-            if (body == null && contentLength != 0) {
+            if (body == null && contentLength > 0) {
 
                 boolean isConvertibleValues = ConvertibleValues.class == type;
                 if (isFormSubmission(contentType)) {
