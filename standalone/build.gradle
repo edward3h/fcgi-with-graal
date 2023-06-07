@@ -20,7 +20,7 @@ dependencies {
     implementation "org.eclipse.jetty:jetty-servlet:$JETTY_VERSION"
     implementation "org.eclipse.jetty.fcgi:fcgi-server:$JETTY_VERSION"
 
-    implementation platform('com.github.fmjsjx:libnetty-bom:2.4.3')
+    implementation platform('com.github.fmjsjx:libnetty-bom:2.7.0')
     implementation 'com.github.fmjsjx:libnetty-fastcgi'
 }
 

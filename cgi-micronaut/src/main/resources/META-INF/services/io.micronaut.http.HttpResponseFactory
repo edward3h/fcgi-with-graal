@@ -1,1 +1,1 @@
-io.micronaut.servlet.http.ServletResponseFactory
+org.ethelred.cgi.micronaut.CgiResponseFactory

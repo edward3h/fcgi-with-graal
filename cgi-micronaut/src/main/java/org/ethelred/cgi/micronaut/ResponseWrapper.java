@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -50,6 +51,16 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
     private Object output;
     private Object body;
     private HttpStatus status = HttpStatus.OK;
+
+    private final CountDownLatch commitLatch = new CountDownLatch(1);
+
+    public void awaitCommit() {
+        try {
+            commitLatch.await();
+        } catch (InterruptedException e) {
+            // ignore
+        }
+    }
 
     /*
     response states - initial -> wrote headers -> done
@@ -103,9 +114,9 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     private void writeHeaders() {
         state.checkModifyHeaders();
-        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains) && status == HttpStatus.OK) {
-            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
-        }
+//        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains) && status == HttpStatus.OK) {
+//            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
+//        }
         state = ResponseState.WROTE_HEADERS;
         LOGGER.info("Writing headers", new Exception("Trace"));
         try (var w = new PrintWriter(cgiRequest.getOutput())) {
@@ -126,6 +137,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
                         });
             }
             w.println();
+            commitLatch.countDown();
         }
     }
 
@@ -155,6 +167,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     @Override
     public MutableHttpResponse<B> cookie(Cookie cookie) {
+        LOGGER.info("Set cookie {}", cookie);
         state.checkModifyHeaders();
         cookies.put(cookie.getName(), cookie);
         return this;
@@ -168,6 +181,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     @Override
     public MutableHttpResponse<B> status(HttpStatus status, CharSequence message) {
+        LOGGER.info("set status {} [{}]", status, message, new Exception("Trace"));
         state.checkModifyHeaders();
         this.status = status;
         if (message != null) {

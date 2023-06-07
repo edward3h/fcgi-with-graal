@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.micronaut.context.ApplicationContext;
+import io.micronaut.http.context.ServerRequestContext;
 import io.micronaut.servlet.http.DefaultServletExchange;
 import io.micronaut.servlet.http.ServletExchange;
 import io.micronaut.servlet.http.ServletHttpHandler;
@@ -37,9 +38,11 @@ public class MicronautCgiHandler extends ServletHttpHandler<CgiRequest, CgiReque
 
     @Override
     public void service(ServletExchange<CgiRequest, CgiRequest> exchange) {
-        super.service(exchange);
-        if (exchange.getResponse() instanceof ResponseWrapper<? super Object> responseWrapper) {
-            responseWrapper.commit();
-        }
+        ServerRequestContext.with(exchange.getRequest(), () -> {
+            super.service(exchange);
+            if (exchange.getResponse() instanceof ResponseWrapper<? super Object> responseWrapper) {
+                responseWrapper.awaitCommit();
+            }
+        });
     }
 }
