@@ -6,6 +6,6 @@ plugins {
 
 dependencies {
     implementation project(':cgi-api'), project(':plain-cgi')
-    implementation group: 'org.graalvm.sdk', name: 'graal-sdk', version: '22.1.0.1'
+    implementation group: 'org.graalvm.sdk', name: 'graal-sdk', version: '22.3.2'
 
 }
