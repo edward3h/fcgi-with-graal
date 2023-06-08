@@ -14,7 +14,7 @@ dependencies {
     antlr 'org.antlr:antlr4:4.10.1'
     testImplementation(testFixtures(project(":cgi-api")))
     implementation 'org.ethelred:ethelred_util:0.4'
-    compileOnly 'io.soabase.record-builder:record-builder-core:33'
+    compileOnly 'io.soabase.record-builder:record-builder-core:36'
     annotationProcessor 'io.soabase.record-builder:record-builder-processor:33'
 }
 
