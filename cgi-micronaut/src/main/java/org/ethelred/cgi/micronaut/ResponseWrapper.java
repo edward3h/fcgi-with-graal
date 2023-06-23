@@ -48,7 +48,9 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
     private final Function<Cookie, String> cookieEncoder;
 
     private ResponseState state = ResponseState.INITIAL;
-    private Object output;
+    private OutputStream output;
+    private BufferedWriter writer;
+
     private Object body;
     private HttpStatus status = HttpStatus.OK;
 
@@ -114,9 +116,9 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     private void writeHeaders() {
         state.checkModifyHeaders();
-//        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains) && status == HttpStatus.OK) {
-//            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
-//        }
+        if (headers.names().stream().noneMatch(CGI_REQUIRED_HEADERS::contains) && status == HttpStatus.OK) {
+            throw new IllegalStateException("Must specify at least one of " + CGI_REQUIRED_HEADERS);
+        }
         state = ResponseState.WROTE_HEADERS;
         LOGGER.info("Writing headers", new Exception("Trace"));
         try (var w = new PrintWriter(cgiRequest.getOutput())) {
@@ -141,28 +143,26 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
         }
     }
 
-    private <O> O getOutput(Class<O> kind, Supplier<O> supplier) {
-        if (kind.isInstance(output)) {
-            return kind.cast(output);
-        }
+    private void initOutput() {
         if (output == null) {
             state.checkDoOutput();
             writeHeaders();
             state = ResponseState.COMMITTED;
-            output = supplier.get();
-            return kind.cast(output);
+            output = cgiRequest.getOutput();
+            writer = new BufferedWriter(new OutputStreamWriter(output));
         }
-        throw new IllegalStateException("Already opened output as " + output.getClass().getSimpleName());
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return getOutput(OutputStream.class, cgiRequest::getOutput);
+        initOutput();
+        return output;
     }
 
     @Override
     public BufferedWriter getWriter() throws IOException {
-        return getOutput(BufferedWriter.class, () -> new BufferedWriter(new OutputStreamWriter(cgiRequest.getOutput(), getCharacterEncoding())));
+        initOutput();
+        return writer;
     }
 
     @Override
@@ -245,18 +245,7 @@ public class ResponseWrapper<B> implements ServletHttpResponse<CgiRequest, B> {
 
     private void _commitOutput() {
         try {
-            // already assigned output, but it could be a Writer or OutputStream
-            if (output instanceof OutputStream stream) {
-                try (stream) {
-                    stream.write('\n');
-                }
-            } else if (output instanceof Writer writer) {
-                try (writer) {
-                    writer.append('\n');
-                }
-            } else {
-                throw new IllegalStateException("Unexpected output state: " + (output == null ? "null" : output.getClass().getName()));
-            }
+            output.write('\n');
         } catch (IOException e) {
             LOGGER.error("Error in _commitOutput", e);
         }

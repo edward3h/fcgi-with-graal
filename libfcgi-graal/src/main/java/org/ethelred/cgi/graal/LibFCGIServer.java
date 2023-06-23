@@ -87,20 +87,21 @@ public class LibFCGIServer implements CgiServer
             LOGGER.info("Started");
             Timer t = new Timer(true);
             t.scheduleAtFixedRate(new MetricsTask(), 0L, TimeUnit.MINUTES.toMillis(1L));
-            while (state.get() == State.RUNNING) {
-                try
-                {
-                    newJob.acquire();
-                    executor.execute(new Worker(handler));
-                } catch (InterruptedException ignore) {
-                    // ignore
-                } catch (Exception e) {
-                    LOGGER.error(
-                            "Unhandled worker exception", e
-                    );
+            executor.execute(() -> {
+                while (state.get() == State.RUNNING) {
+                    try {
+                        newJob.acquire();
+                        executor.execute(new Worker(handler));
+                    } catch (InterruptedException ignore) {
+                        // ignore
+                    } catch (Exception e) {
+                        LOGGER.error(
+                                "Unhandled worker exception", e
+                        );
+                    }
                 }
-            }
-            callback.onCompleted();
+                callback.onCompleted();
+            });
         }
     }
 
@@ -152,6 +153,7 @@ public class LibFCGIServer implements CgiServer
         @Override
         public void run()
         {
+            LOGGER.debug("new Worker");
             FCGX_Request request = StackValue.get(FCGX_Request.class);
             FCGX_InitRequest(request, 0, 0);
 
@@ -165,6 +167,7 @@ public class LibFCGIServer implements CgiServer
             }
 
             try {
+                LOGGER.debug("Worker handle request");
                 handler.handleRequest(new LibFCGIRequest(request));
             } catch(Exception e)
             {
@@ -174,7 +177,7 @@ public class LibFCGIServer implements CgiServer
                 requestCounter.incrementAndGet();
                 FCGX_Finish_r(request);
             }
-
+            LOGGER.debug("Worker finished");
         }
     }
 

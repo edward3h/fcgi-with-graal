@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.ethelred.cgi'
-version = '0.3-SNAPSHOT'
+version = '0.5'
 
 /*
 To publish, run
