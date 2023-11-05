@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":cgi-api"))
 
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     def JETTY_VERSION = '9.4.51.v20230217'
