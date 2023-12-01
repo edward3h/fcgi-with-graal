@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     testImplementation 'org.codehaus.groovy:groovy-all:3.0.17'
