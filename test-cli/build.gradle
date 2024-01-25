@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    testImplementation "org.testcontainers:testcontainers:1.17.2"
-    testImplementation "org.testcontainers:spock:1.17.2"
+    testImplementation "org.testcontainers:testcontainers:1.19.4"
+    testImplementation "org.testcontainers:spock:1.19.4"
 }
 
 graalDocker {
